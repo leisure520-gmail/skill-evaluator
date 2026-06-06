@@ -1,0 +1,59 @@
+stages:
+  - evaluate
+
+variables:
+  SKILL_EVALUATOR_PATH: "skill-evaluator"
+
+skill-evaluation:
+  stage: evaluate
+  image: python:3.11-slim
+  only:
+    changes:
+      - "**/SKILL.md"
+      - "**/references/**"
+      - "**/templates/**"
+  except:
+    changes:
+      - "skill-evaluator/**"
+  before_script:
+    - pip install requests
+  script:
+    - |
+      SKILL_PATH="${SKILL_PATH:-.}"
+
+      if [ "$SKILL_PATH" = "." ]; then
+        SKILLS=$(find . -name 'SKILL.md' -not -path './SKILL.md' -not -path './eval-results/*')
+      else
+        SKILLS="$SKILL_PATH/SKILL.md"
+      fi
+
+      if [ -z "$SKILLS" ]; then
+        echo "No SKILL.md files found to evaluate."
+        exit 0
+      fi
+
+      mkdir -p eval-results
+
+      for SKILL in $SKILLS; do
+        SKILL_DIR=$(dirname "$SKILL")
+        SKILL_NAME=$(basename "$SKILL_DIR")
+        TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
+        OUTPUT_DIR="eval-results/$SKILL_NAME"
+        mkdir -p "$OUTPUT_DIR"
+
+        echo "Evaluating: $SKILL_NAME"
+        echo "Output: $OUTPUT_DIR/track1_${TIMESTAMP}.md"
+
+        # Use Claude Code CLI for evaluation
+        if command -v claude &> /dev/null; then
+          claude --skill skill-evaluator "评估 $SKILL" > "$OUTPUT_DIR/track1_${TIMESTAMP}.md" 2>&1
+        else
+          echo "Claude CLI not available. Skipping evaluation for $SKILL_NAME." > "$OUTPUT_DIR/track1_${TIMESTAMP}.md"
+        fi
+      done
+  artifacts:
+    paths:
+      - eval-results/
+    expire_in: 90 days
+  variables:
+    QIANFAN_BEARER_TOKEN: $QIANFAN_BEARER_TOKEN

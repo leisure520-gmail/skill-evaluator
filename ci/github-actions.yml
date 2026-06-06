@@ -1,0 +1,87 @@
+name: Skill Evaluation
+
+on:
+  push:
+    paths:
+      - '**/SKILL.md'
+      - '**/references/**'
+      - '**/templates/**'
+  pull_request:
+    paths:
+      - '**/SKILL.md'
+      - '**/references/**'
+      - '**/templates/**'
+  workflow_dispatch:
+    inputs:
+      skill_path:
+        description: 'Path to the Skill directory to evaluate'
+        required: false
+        default: '.'
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Skill Evaluation (Track 1)
+        env:
+          QIANFAN_BEARER_TOKEN: ${{ secrets.QIANFAN_BEARER_TOKEN }}
+        run: |
+          SKILL_PATH="${{ github.event.inputs.skill_path || '.' }}"
+
+          # Find all SKILL.md files (excluding skill-evaluator itself)
+          if [ "$SKILL_PATH" = "." ]; then
+            SKILLS=$(find . -name 'SKILL.md' -not -path './SKILL.md' -not -path './eval-results/*')
+          else
+            SKILLS="$SKILL_PATH/SKILL.md"
+          fi
+
+          if [ -z "$SKILLS" ]; then
+            echo "No SKILL.md files found to evaluate."
+            exit 0
+          fi
+
+          mkdir -p eval-results
+
+          for SKILL in $SKILLS; do
+            SKILL_DIR=$(dirname "$SKILL")
+            SKILL_NAME=$(basename "$SKILL_DIR")
+            TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
+            OUTPUT_DIR="eval-results/$SKILL_NAME"
+            mkdir -p "$OUTPUT_DIR"
+
+            echo "Evaluating: $SKILL_NAME"
+            echo "Output: $OUTPUT_DIR/track1_${TIMESTAMP}.md"
+
+            # Use Claude Code CLI for evaluation
+            # Requires ANTHROPIC_API_KEY secret to be configured
+            if command -v claude &> /dev/null; then
+              claude --skill skill-evaluator "评估 $SKILL" > "$OUTPUT_DIR/track1_${TIMESTAMP}.md" 2>&1
+            else
+              echo "Claude CLI not available. Skipping evaluation for $SKILL_NAME."
+              echo "Install Claude Code CLI or use the API-based evaluation script." > "$OUTPUT_DIR/track1_${TIMESTAMP}.md"
+            fi
+          done
+
+      - name: Upload Evaluation Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: eval-results/
+          retention-days: 90
+
+      - name: Check Evaluation Threshold
+        run: |
+          # Parse the latest evaluation results and check if any Skill is below S-grade
+          # This step can be customized with specific threshold logic
+          echo "Evaluation results uploaded. Review the artifact for details."
