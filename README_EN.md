@@ -2,17 +2,17 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) | [中文](README.md)
 
-A Skill for evaluating AI Agent Skill quality. Features a **dual-track** design: Track 1 (full-scan 8-dimension quality evaluation) + Track 2 (system architecture 13-dimension evaluation), with strict sequential execution. Supports full file scanning, incremental evaluation, multi-model cross-validation, Qianfan API multi-model calls, and serial multi-perspective fallback. Provides three execution strategies with automatic priority-based degradation, ensuring cross-platform availability.
+A Skill for evaluating AI Agent Skill quality. Features a **three-layer evaluation** design: Layer 1 (file quality 8 dimensions) -> Layer 2 (category consistency 8 dimensions) -> Layer 3 (system architecture 12 dimensions), with strict progressive execution — lower layers must pass before advancing to higher layers. Supports full file scanning, incremental evaluation, multi-model cross-validation, Qianfan API multi-model calls, and serial multi-perspective fallback. Provides three execution strategies with automatic priority-based degradation, ensuring cross-platform availability.
 
 Compatible with all AI Agent platforms supporting Skill mechanisms, including but not limited to Claude Code, Ducc, etc.
 
 ## Features
 
-- **Dual-Track Evaluation** -- Track 1 (full-scan 8 dimensions) + Track 2 (system architecture 13 dimensions), strict sequential execution
+- **Three-Layer Evaluation** -- Layer 1 (file quality 8 dimensions) -> Layer 2 (category consistency 8 dimensions) -> Layer 3 (system architecture 12 dimensions), strict progressive execution
 - **Full File Scanning** -- Auto-discover all .md files, classify as entry/sub-doc/root, no hardcoded directory structure
 - **Incremental Evaluation** -- Skip unchanged files via SHA-256 content fingerprint, only evaluate new/modified files
 - **Evaluation Depth Grading** -- Entry files and sub-documents with frontmatter get full evaluation (D1-D8); sub-documents without frontmatter get lightweight evaluation (D3+D7)
-- **Multi-Dimensional Scoring** -- 8 weighted dimensions for Track 1, 13 for Track 2, each scored 0-10
+- **Multi-Dimensional Scoring** -- 8 dimensions for Layer 1, 8 for Layer 2, 12 for Layer 3, each scored 0-10
 - **Grade Mapping** -- Composite scores automatically mapped to S/A/B/C/D grades, S-grade (>= 9.0) is the only passing standard
 - **Improvement Suggestions** -- Problem descriptions, impact analysis, and actionable suggestions for each weak dimension
 - **Multi-Skill Comparison** -- Side-by-side scoring tables, strength/weakness analysis, and rankings
@@ -21,23 +21,31 @@ Compatible with all AI Agent platforms supporting Skill mechanisms, including bu
 - **Serial Multi-Perspective Fallback** -- Automatic switching when strategies A/B are unavailable: same model evaluates from strict/pragmatic/expert perspectives
 - **Automatic Strategy Degradation** -- A (subagent parallel) -> B (Qianfan API) -> C (serial multi-perspective), transparent to users
 
-## Dual-Track Evaluation System
+## Three-Layer Evaluation System
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│              Dual-Track Evaluation System                │
+│             Three-Layer Evaluation System                │
 ├─────────────────────────────────────────────────────────┤
-│  Track 1: Full-Scan Quality Evaluation (8 dimensions)    │
-│  ├── Target: All entry files (SKILL.md) and sub-docs     │
-│  ├── Focus: Is each file well-written?                   │
+│  Layer 1: File Quality Evaluation (8 dims × all files)   │
+│  ├── Focus: Is this file well-written?                   │
+│  ├── Target: Each .md file evaluated independently       │
 │  ├── Incremental: Skip unchanged files via fingerprint   │
 │  ├── Passing: Composite score >= 9.0 (S-grade)           │
-│  └── Not passed -> Fix and re-evaluate, no Track 2       │
+│  └── Not passed -> Fix and re-evaluate, no Layer 2       │
 │           │                                             │
-│           v All files passed                            │
-│  Track 2: System Architecture Evaluation (13 dimensions) │
-│  ├── Target: Entire Skill system                        │
-│  ├── Focus: Is the system well-designed?                │
+│           v All files in category passed                 │
+│  Layer 2: Category Consistency Evaluation (8 dims × cat) │
+│  ├── Focus: Are files within a category coordinated?     │
+│  ├── Target: Each category (SKILL.md + sub-docs)         │
+│  ├── Checks: Conflicts, overlaps, gaps, refs, terms      │
+│  ├── Passing: Composite score >= 9.0 (S-grade)           │
+│  └── Not passed -> Fix and re-evaluate, no Layer 3       │
+│           │                                             │
+│           v All categories passed                        │
+│  Layer 3: System Architecture Evaluation (12 dimensions) │
+│  ├── Focus: Is the overall system well-designed?         │
+│  ├── Target: Entire Skill system                         │
 │  ├── Passing: Weighted score >= 9.0 (S-grade)            │
 │  └── Output: Maturity level + improvement roadmap       │
 └─────────────────────────────────────────────────────────┘
@@ -45,7 +53,7 @@ Compatible with all AI Agent platforms supporting Skill mechanisms, including bu
 
 ## Evaluation Dimensions
 
-### Track 1: Full-Scan Quality Evaluation (8 dimensions)
+### Layer 1: File Quality Evaluation (8 dimensions)
 
 | Dimension | Weight | Description |
 |---|---|---|
@@ -58,31 +66,43 @@ Compatible with all AI Agent platforms supporting Skill mechanisms, including bu
 | D7. Writing Quality | 10% | Structure clarity, readability, and precision |
 | D8. Scope & Focus | 10% | Focused on a single problem domain |
 
-### Track 2: System Architecture (13 dimensions)
+### Layer 2: Category Consistency Evaluation (8 dimensions)
+
+| Dimension | Weight | Description |
+|---|---|---|
+| D1. Responsibility Boundaries | 15% | No overlap or gaps in file responsibilities within category |
+| D2. Terminology Consistency | 10% | Same concept uses unified terminology across all files |
+| D3. Cross-References | 10% | Inter-file references are correct and reachable |
+| D4. Knowledge Coverage | 15% | Core scenarios of the category domain are fully covered |
+| D5. Redundancy Detection | 10% | No large-scale duplication across files |
+| D6. Hierarchical Structure | 10% | Consistent numbering/grouping/naming logic |
+| D7. Metadata Consistency | 15% | Sub-doc frontmatter matches routing table, no orphaned/ghost |
+| D8. Workflow Closure | 15% | Workflows declared in entry file are fully covered by sub-docs |
+
+### Layer 3: System Architecture Evaluation (12 dimensions)
 
 | Dimension | Weight | Description |
 |---|---|---|
 | D1. Modular Encapsulation | 10% | Skills are independent, testable, composable |
 | D2. Progressive Disclosure | 8% | On-demand loading, three-stage (discover->activate->execute) |
-| D3. TDD Workflow | 15% | Test-first, RED-GREEN-REFACTOR cycle |
+| D3. TDD Workflow | 12% | Test-first, RED-GREEN-REFACTOR cycle |
 | D4. Three-File Pattern | 7% | plan.md + context.md + tasks.md structured management |
-| D5. Skill Discovery & Composition | 8% | Auto-identify task types and recommend/combine skills |
+| D5. Skill Discovery & Composition | 10% | Auto-identify task types and recommend/combine skills |
 | D6. Knowledge Reusability | 8% | Cross-project reuse, versioning, and quality feedback |
 | D7. Skill Design Principles | 8% | Single responsibility, high cohesion, low coupling |
 | D8. Progressive Adoption | 5% | 4-stage adoption path with "minimum viable set" |
 | D9. Convention Structure | 5% | Quantifiable and verifiable conventions |
-| D10. On-Demand Loading | 6% | Context budget management |
+| D10. On-Demand Loading | 7% | Context budget management |
 | D11. Scenario Adaptation | 10% | Lightweight mode, compliance intensity matches task complexity |
 | D12. Continuous Maintenance | 10% | Auto-detection, CHANGELOG, approval workflow |
-| D13. Sub-Document Consistency | 5% | Sub-doc frontmatter matches routing table, no orphaned/ghost references |
 
 ## Grade Standards
 
-Both tracks share the same grade mapping:
+All three layers share the same grade mapping:
 
 | Score | Grade | Meaning |
 |---|---|---|
-| 9.0-10 | S | Excellent -- Benchmark Skill (only passing grade) |
+| 9.0-10 | S | Excellent -- Benchmark (only passing grade) |
 | 7.5-8.9 | A | Great -- Ready to use, needs minor polish |
 | 6.0-7.4 | B | Acceptable -- Usable but has clear room for improvement |
 | 4.0-5.9 | C | Weak -- Needs significant revision |
@@ -185,16 +205,24 @@ Strategies are automatically selected based on execution conditions (A -> B -> C
 
 ```
 skill-evaluator/
-├── SKILL.md                              # Main entry (~120 lines, routing + constraints)
+├── SKILL.md                              # Main entry (routing + constraints)
 ├── references/                           # Evaluation docs (loaded on demand)
-│   ├── track1-quality.md                 # Track 1: Full-scan quality evaluation
-│   ├── track2-architecture.md            # Track 2: 13-dimension architecture evaluation
+│   ├── layer1-quality.md                 # Layer 1: File quality evaluation
+│   ├── layer2-consistency.md             # Layer 2: Category consistency evaluation
+│   ├── layer3-architecture.md            # Layer 3: System architecture evaluation
 │   ├── eval-state.md                     # Incremental evaluation state management
 │   └── multi-model.md                    # Multi-model cross-validation strategy
-├── templates/                            # Reference templates (used by multi-model mode)
-│   ├── dimensions.md                     # 8-dimension scoring standards
-│   ├── prompts.md                        # Evaluation prompt templates
-│   └── report-formats.md                 # Report output format templates
+├── templates/                            # Reference templates (maintained per layer)
+│   ├── dimensions.md                     # Scoring standards routing index
+│   ├── dimensions-layer1.md              # Layer 1 scoring standards
+│   ├── dimensions-layer2.md              # Layer 2 scoring standards
+│   ├── prompts.md                        # Prompt templates routing index
+│   ├── prompts-layer1.md                 # Layer 1 prompt templates
+│   ├── prompts-layer2.md                 # Layer 2 prompt templates
+│   ├── report-formats.md                 # Report formats routing index + multi-Skill comparison
+│   ├── report-layer1.md                  # Layer 1 report formats
+│   ├── report-layer2.md                  # Layer 2 report formats
+│   └── report-layer3.md                  # Layer 3 report formats
 ├── scripts/
 │   └── qianfan_chat.py                   # Qianfan API call script
 ├── ci/                                   # CI integration configs
@@ -216,13 +244,13 @@ After evaluation, reports are automatically saved as Markdown files:
 eval-results/
 ├── eval-state.json                       # Incremental evaluation state file
 └── my-awesome-skill/
-    ├── track1_2026-06-07_143025.md
-    ├── track1_2026-05-20_091500.md
-    └── track2_2026-06-07_150030.md
+    ├── layer1_2026-06-07_143025.md
+    ├── layer2_2026-06-07_150030.md
+    └── layer3_2026-06-07_160045.md
 ```
 
 - Default save directory: `./eval-results/`, customizable during pre-flight check
-- File naming: `{track}_{YYYY-MM-DD_HHmmss}.md`
+- File naming: `layer{N}_{YYYY-MM-DD_HHmmss}.md`
 - Historical trend analysis is automatically generated when previous reports exist
 
 ## CI Integration
@@ -267,10 +295,10 @@ This Skill is an independent third-party evaluation tool and does not belong to 
 
 ## Output Examples
 
-### Single-Model Evaluation
+### Layer 1: File Quality Evaluation
 
 ```
-## Skill Evaluation Report
+## Skill Evaluation Report (Layer 1: File Quality)
 
 ### Incremental Evaluation Summary
 
@@ -309,10 +337,36 @@ This Skill is an independent third-party evaluation tool and does not belong to 
 2. **SKILL.md - D5. I/O Clarity**: Missing input examples -> Add 2-3 concrete input examples in usage scenarios
 ```
 
+### Layer 2: Category Consistency Evaluation
+
+```
+## Category Consistency Evaluation Report (Layer 2)
+
+### java-convention
+
+**Weighted Score: 8.5 / 10 (Grade A)**
+
+| Dimension | Score | Weight | Notes |
+|-----------|-------|--------|-------|
+| D1 Responsibility Boundaries | 9/10 | 15% | Clear responsibilities, no overlap |
+| D2 Terminology Consistency | 8/10 | 10% | Core terms unified, minor abbreviation inconsistency |
+| D3 Cross-References | 9/10 | 10% | References correct and reachable |
+| D4 Knowledge Coverage | 8/10 | 15% | Core scenarios covered, missing caching strategy |
+| D5 Redundancy Detection | 7/10 | 10% | 01 and 09 have duplicate definitions |
+| D6 Hierarchical Structure | 9/10 | 10% | Continuous numbering, unified naming |
+| D7 Metadata Consistency | 9/10 | 15% | Frontmatter matches routing table |
+| D8 Workflow Closure | 8/10 | 15% | Main flow covered, branches missing |
+
+### Issues & Suggestions
+
+1. **D5 Redundancy Detection**: 01-base-entity.md and 09-exception-handling.md duplicate exception handling -> Consolidate into 09, 01 uses reference
+2. **D4 Knowledge Coverage**: Missing caching strategy best practices -> Add 13-caching.md
+```
+
 ### Multi-Model Cross-Validation
 
 ```
-## Skill Evaluation Report (Multi-Model Cross-Validation)
+## Skill Evaluation Report (Layer 1: File Quality — Multi-Model Cross-Validation)
 
 ### my-awesome-skill
 

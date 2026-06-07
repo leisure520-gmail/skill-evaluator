@@ -1,4 +1,4 @@
-name: Skill Evaluation (v3.0 — 全量扫描 + 增量评估)
+name: Skill Evaluation (v3.1 — 三层评估 + 全量扫描 + 增量评估)
 
 on:
   push:
@@ -35,7 +35,7 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Run Skill Evaluation (Track 1 — Full Scan)
+      - name: Run Skill Evaluation (Layer 1 — Full Scan)
         env:
           QIANFAN_BEARER_TOKEN: ${{ secrets.QIANFAN_BEARER_TOKEN }}
         run: |
@@ -70,15 +70,15 @@ jobs:
             mkdir -p "$OUTPUT_DIR"
 
             echo "Evaluating: $SKILL_NAME"
-            echo "Output: $OUTPUT_DIR/track1_${TIMESTAMP}.md"
+            echo "Output: $OUTPUT_DIR/layer1_${TIMESTAMP}.md"
 
             # Use Claude Code CLI for evaluation
             # Requires ANTHROPIC_API_KEY secret to be configured
             if command -v claude &> /dev/null; then
-              claude --skill skill-evaluator "评估 $SKILL" > "$OUTPUT_DIR/track1_${TIMESTAMP}.md" 2>&1
+              claude --skill skill-evaluator "评估 $SKILL" > "$OUTPUT_DIR/layer1_${TIMESTAMP}.md" 2>&1
             else
               echo "Claude CLI not available. Skipping evaluation for $SKILL_NAME."
-              echo "Install Claude Code CLI or use the API-based evaluation script." > "$OUTPUT_DIR/track1_${TIMESTAMP}.md"
+              echo "Install Claude Code CLI or use the API-based evaluation script." > "$OUTPUT_DIR/layer1_${TIMESTAMP}.md"
             fi
           done
 

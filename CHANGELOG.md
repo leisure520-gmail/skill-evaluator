@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.1.0] - 2026-06-07
+
+### Added
+
+- **三层评估体系**：从"双轨"升级为"三层"，新增第二层（分类一致性评估）
+- **第二层：分类一致性评估**（8 维度）：评估同一分类下文件之间是否协调——有无冲突、重叠、遗漏
+- **第二层 8 维度**：D1 职责边界、D2 术语一致性、D3 交叉引用、D4 知识覆盖度、D5 冗余检测、D6 层级结构、D7 元数据一致性、D8 工作流闭环
+- **第二层 Prompt 模板**：独立评估、交叉互审、三视角评审模板
+- **第二层报告格式**：单模型、多模型、多视角三种报告格式
+- `references/layer2-consistency.md`：分类一致性评估文档
+
+### Changed
+
+- **术语重命名**：轨道一/轨道二 → 第一层/第二层/第三层，双轨评估体系 → 三层评估体系
+- **文件重命名**：`track1-quality.md` → `layer1-quality.md`，`track2-architecture.md` → `layer3-architecture.md`
+- **第三层维度调整**：从 13 维度精简为 12 维度，D13（子文档一致性）移至第二层 D7
+- **第三层权重重分配**：D3 从 15% 调整为 12%，D5 从 8% 调整为 10%，D10 从 6% 调整为 7%，D12 从 10% 不变，总权重 100%
+- SKILL.md 从 v3.0.0 升级至 v3.1.0，评估体系从双轨改为三层
+- `templates/dimensions.md` 增加第二层 8 维度评分标准
+- `templates/prompts.md` 增加第二层 Prompt 模板
+- `templates/report-formats.md` 增加第二层报告格式
+- CI 配置更新术语：track1 → layer1
+
 ## [3.0.0] - 2026-06-07
 
 ### Added

@@ -50,13 +50,13 @@ skill-evaluation:
         mkdir -p "$OUTPUT_DIR"
 
         echo "Evaluating: $SKILL_NAME"
-        echo "Output: $OUTPUT_DIR/track1_${TIMESTAMP}.md"
+        echo "Output: $OUTPUT_DIR/layer1_${TIMESTAMP}.md"
 
         # Use Claude Code CLI for evaluation
         if command -v claude &> /dev/null; then
-          claude --skill skill-evaluator "评估 $SKILL" > "$OUTPUT_DIR/track1_${TIMESTAMP}.md" 2>&1
+          claude --skill skill-evaluator "评估 $SKILL" > "$OUTPUT_DIR/layer1_${TIMESTAMP}.md" 2>&1
         else
-          echo "Claude CLI not available. Skipping evaluation for $SKILL_NAME." > "$OUTPUT_DIR/track1_${TIMESTAMP}.md"
+          echo "Claude CLI not available. Skipping evaluation for $SKILL_NAME." > "$OUTPUT_DIR/layer1_${TIMESTAMP}.md"
         fi
       done
   artifacts:

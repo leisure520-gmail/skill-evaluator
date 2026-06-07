@@ -1,8 +1,8 @@
-# 轨道一：全量质量评估
+# 第一层：文件质量评估
 
-评估 Skill 体系内所有 .md 文件的写作质量。8 个加权维度，0-10 分制，S 级（>= 9.0）为唯一达标等级。
+评估 Skill 体系内每个 .md 文件的写作质量。8 个加权维度，0-10 分制，S 级（>= 9.0）为唯一达标等级。
 
-> **评分标准唯一来源**：`templates/dimensions.md`。多模型模式时，Prompt 模板详见 `templates/prompts.md`，报告格式详见 `templates/report-formats.md`。
+> **评分标准唯一来源**：`templates/dimensions-layer1.md`。多模型模式时，Prompt 模板详见 `templates/prompts-layer1.md`，报告格式详见 `templates/report-layer1.md`。
 > **增量评估**：评估范围由 `references/eval-state.md` 确定，跳过未变更文件。
 
 ---
@@ -25,7 +25,7 @@
 | 入口文件（SKILL.md） | 完整评估 | D1-D8 全部 | 体系入口，完整 8 维度打分 |
 | 子文档（有 frontmatter） | 完整评估 | D1-D8 全部 | 含元数据的规范文档，完整评估 |
 | 子文档（无 frontmatter） | 轻量评估 | D3+D7 | 无元数据的辅助文档，仅评估内容质量和写作质量 |
-| 根目录文件 | 不评估 | — | 由轨道二体系评估覆盖 |
+| 根目录文件 | 不评估 | — | 由第三层体系评估覆盖 |
 
 > **frontmatter 检测**：文件开头以 `---` 开始且在后续 `---` 之前包含 YAML 键值对，则判定为有 frontmatter。
 
@@ -41,7 +41,7 @@
 
 ## 8 维度评估框架
 
-> 每个维度的**评分细则**（0-10 分各档标准）详见 `templates/dimensions.md`。以下仅列出各维度的**检查项清单**，用于逐项确认通过情况。
+> 每个维度的**评分细则**（0-10 分各档标准）详见 `templates/dimensions-layer1.md`。以下仅列出各维度的**检查项清单**，用于逐项确认通过情况。
 
 ### D1：元数据质量（权重 15%）
 
@@ -153,7 +153,7 @@ Skill 是否内嵌了通用 Agent 不具备的专业知识、最佳实践和行�
 
 **综合得分 = D3×0.6 + D7×0.4**
 
-等级映射详见 `templates/dimensions.md` 底部「等级映射」章节。
+等级映射详见 `templates/dimensions-layer1.md` 底部「等级映射」章节。
 
 ---
 
@@ -171,7 +171,7 @@ Skill 是否内嵌了通用 Agent 不具备的专业知识、最佳实践和行�
    g. 更新评估状态文件（references/eval-state.md）
 3. 聚合分类级评分（入口文件 + 子文档的平均分/最低分）
 4. 输出评估报告
-5. 持久化：将报告保存到 {评估结果根目录}/{Skill名称}/track1_{YYYY-MM-DD_HHmmss}.md
+5. 持久化：将报告保存到 {评估结果根目录}/{Skill名称}/layer1_{YYYY-MM-DD_HHmmss}.md
 6. 历史对比：若该 Skill 存在历史评估报告，输出趋势分析
 ```
 
@@ -194,7 +194,7 @@ Skill 是否内嵌了通用 Agent 不具备的专业知识、最佳实践和行�
 
 评估完成后，自动将报告保存为 Markdown 文件：
 
-- **保存路径**：`{评估结果根目录}/{Skill名称}/track1_{YYYY-MM-DD_HHmmss}.md`
+- **保存路径**：`{评估结果根目录}/{Skill名称}/layer1_{YYYY-MM-DD_HHmmss}.md`
 - **默认根目录**：`./eval-results/`（相对于当前工作目录）
 - **路径不存在时**：自动创建目录
 - **保存内容**：完整评估报告（评分表 + 问题建议 + 历史趋势 + 增量评估摘要）
@@ -224,7 +224,7 @@ Skill 是否内嵌了通用 Agent 不具备的专业知识、最佳实践和行�
 
 ## 评估报告格式
 
-报告格式详见 `templates/report-formats.md`：
+报告格式详见 `templates/report-layer1.md`：
 - 单模型模式 -> 使用「单模型报告」格式
 - 多模型模式 -> 使用「多模型报告」或「多视角报告」格式
 - 多 Skill 对比 -> 附加「多 Skill 对比格式」
