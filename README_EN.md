@@ -2,14 +2,17 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) | [中文](README.md)
 
-A Skill for evaluating AI Agent Skill quality. Features a **dual-track** design: Track 1 (single-file 8-dimension quality evaluation) + Track 2 (system architecture 12-dimension evaluation), with strict sequential execution. Supports multi-model cross-validation, Qianfan API multi-model calls, and serial multi-perspective fallback. Provides three execution strategies with automatic priority-based degradation, ensuring cross-platform availability.
+A Skill for evaluating AI Agent Skill quality. Features a **dual-track** design: Track 1 (full-scan 8-dimension quality evaluation) + Track 2 (system architecture 13-dimension evaluation), with strict sequential execution. Supports full file scanning, incremental evaluation, multi-model cross-validation, Qianfan API multi-model calls, and serial multi-perspective fallback. Provides three execution strategies with automatic priority-based degradation, ensuring cross-platform availability.
 
 Compatible with all AI Agent platforms supporting Skill mechanisms, including but not limited to Claude Code, Ducc, etc.
 
 ## Features
 
-- **Dual-Track Evaluation** -- Track 1 (8 dimensions for single files) + Track 2 (12 dimensions for system architecture), strict sequential execution
-- **Multi-Dimensional Scoring** -- 8 weighted dimensions for Track 1, 12 for Track 2, each scored 0-10
+- **Dual-Track Evaluation** -- Track 1 (full-scan 8 dimensions) + Track 2 (system architecture 13 dimensions), strict sequential execution
+- **Full File Scanning** -- Auto-discover all .md files, classify as entry/sub-doc/root, no hardcoded directory structure
+- **Incremental Evaluation** -- Skip unchanged files via SHA-256 content fingerprint, only evaluate new/modified files
+- **Evaluation Depth Grading** -- Entry files and sub-documents with frontmatter get full evaluation (D1-D8); sub-documents without frontmatter get lightweight evaluation (D3+D7)
+- **Multi-Dimensional Scoring** -- 8 weighted dimensions for Track 1, 13 for Track 2, each scored 0-10
 - **Grade Mapping** -- Composite scores automatically mapped to S/A/B/C/D grades, S-grade (>= 9.0) is the only passing standard
 - **Improvement Suggestions** -- Problem descriptions, impact analysis, and actionable suggestions for each weak dimension
 - **Multi-Skill Comparison** -- Side-by-side scoring tables, strength/weakness analysis, and rankings
@@ -24,14 +27,15 @@ Compatible with all AI Agent platforms supporting Skill mechanisms, including bu
 ┌─────────────────────────────────────────────────────────┐
 │              Dual-Track Evaluation System                │
 ├─────────────────────────────────────────────────────────┤
-│  Track 1: Single-File Quality Evaluation (8 dimensions)  │
-│  ├── Target: Individual Skill file                      │
-│  ├── Focus: Is this Skill well-written?                 │
+│  Track 1: Full-Scan Quality Evaluation (8 dimensions)    │
+│  ├── Target: All entry files (SKILL.md) and sub-docs     │
+│  ├── Focus: Is each file well-written?                   │
+│  ├── Incremental: Skip unchanged files via fingerprint   │
 │  ├── Passing: Composite score >= 9.0 (S-grade)           │
 │  └── Not passed -> Fix and re-evaluate, no Track 2       │
 │           │                                             │
-│           v All Skills passed                           │
-│  Track 2: System Architecture Evaluation (12 dimensions) │
+│           v All files passed                            │
+│  Track 2: System Architecture Evaluation (13 dimensions) │
 │  ├── Target: Entire Skill system                        │
 │  ├── Focus: Is the system well-designed?                │
 │  ├── Passing: Weighted score >= 9.0 (S-grade)            │
@@ -41,7 +45,7 @@ Compatible with all AI Agent platforms supporting Skill mechanisms, including bu
 
 ## Evaluation Dimensions
 
-### Track 1: Single-File Quality (8 dimensions)
+### Track 1: Full-Scan Quality Evaluation (8 dimensions)
 
 | Dimension | Weight | Description |
 |---|---|---|
@@ -54,7 +58,7 @@ Compatible with all AI Agent platforms supporting Skill mechanisms, including bu
 | D7. Writing Quality | 10% | Structure clarity, readability, and precision |
 | D8. Scope & Focus | 10% | Focused on a single problem domain |
 
-### Track 2: System Architecture (12 dimensions)
+### Track 2: System Architecture (13 dimensions)
 
 | Dimension | Weight | Description |
 |---|---|---|
@@ -70,6 +74,7 @@ Compatible with all AI Agent platforms supporting Skill mechanisms, including bu
 | D10. On-Demand Loading | 6% | Context budget management |
 | D11. Scenario Adaptation | 10% | Lightweight mode, compliance intensity matches task complexity |
 | D12. Continuous Maintenance | 10% | Auto-detection, CHANGELOG, approval workflow |
+| D13. Sub-Document Consistency | 5% | Sub-doc frontmatter matches routing table, no orphaned/ghost references |
 
 ## Grade Standards
 
@@ -182,8 +187,9 @@ Strategies are automatically selected based on execution conditions (A -> B -> C
 skill-evaluator/
 ├── SKILL.md                              # Main entry (~120 lines, routing + constraints)
 ├── references/                           # Evaluation docs (loaded on demand)
-│   ├── track1-quality.md                 # Track 1: 8-dimension self-contained evaluation
-│   ├── track2-architecture.md            # Track 2: 12-dimension self-contained evaluation
+│   ├── track1-quality.md                 # Track 1: Full-scan quality evaluation
+│   ├── track2-architecture.md            # Track 2: 13-dimension architecture evaluation
+│   ├── eval-state.md                     # Incremental evaluation state management
 │   └── multi-model.md                    # Multi-model cross-validation strategy
 ├── templates/                            # Reference templates (used by multi-model mode)
 │   ├── dimensions.md                     # 8-dimension scoring standards
@@ -208,6 +214,7 @@ After evaluation, reports are automatically saved as Markdown files:
 
 ```
 eval-results/
+├── eval-state.json                       # Incremental evaluation state file
 └── my-awesome-skill/
     ├── track1_2026-06-07_143025.md
     ├── track1_2026-05-20_091500.md
@@ -235,7 +242,7 @@ Required Secrets:
 - `QIANFAN_BEARER_TOKEN`: Qianfan API Token (optional, for Strategy B)
 
 Triggers:
-- Push or PR that modifies `SKILL.md` or `references/`, `templates/` directories
+- Push or PR that modifies `SKILL.md` or `references/`, `templates/` directories or any `.md` file
 - Supports manual trigger (workflow_dispatch) with custom Skill path
 
 ### GitLab CI
@@ -251,7 +258,7 @@ Required GitLab CI/CD Variables:
 - `QIANFAN_BEARER_TOKEN`: Qianfan API Token (optional)
 
 Triggers:
-- Automatically runs when `SKILL.md` or `references/`, `templates/` directories change
+- Automatically runs when `SKILL.md` or `references/`, `templates/` directories or any `.md` file change
 - Evaluation results retained as artifacts for 90 days
 
 ## Independence Declaration
@@ -265,7 +272,16 @@ This Skill is an independent third-party evaluation tool and does not belong to 
 ```
 ## Skill Evaluation Report
 
-### my-awesome-skill
+### Incremental Evaluation Summary
+
+- Evaluation mode: Incremental
+- Evaluated files: 8 | Skipped files (unchanged): 42
+
+### java-convention — Composite Score
+
+**Category Average: 8.3 / 10 (Grade A) | Minimum: 7.2 / 10 (Grade B)**
+
+#### Entry File: SKILL.md
 
 **Composite Score: 7.8 / 10 (Grade A)**
 
@@ -280,10 +296,17 @@ This Skill is an independent third-party evaluation tool and does not belong to 
 | D7. Writing Quality | 8/10 | Clear structure, smooth logic |
 | D8. Scope & Focus | 8/10 | Focused on a single problem domain |
 
+#### Sub-Document Score Overview
+
+| File | Depth | Score | Grade | Main Issue |
+|------|-------|-------|-------|------------|
+| 01-base-entity.md | Full | 8.5/10 | A | D6 resource underutilization |
+| 99-workflows/create.md | Light | 8.0/10 | A | — |
+
 #### Issues & Suggestions
 
-1. **D2. Execution Guidance Clarity**: Missing exception handling guidance -> Add branching logic for "when user input is incomplete"
-2. **D5. I/O Clarity**: Missing input examples -> Add 2-3 concrete input examples in usage scenarios
+1. **SKILL.md - D2. Execution Guidance Clarity**: Missing exception handling guidance -> Add branching logic for "when user input is incomplete"
+2. **SKILL.md - D5. I/O Clarity**: Missing input examples -> Add 2-3 concrete input examples in usage scenarios
 ```
 
 ### Multi-Model Cross-Validation
