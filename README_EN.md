@@ -213,13 +213,13 @@ skill-evaluator/
 │   ├── eval-state.md                     # Incremental evaluation state management
 │   └── multi-model.md                    # Multi-model cross-validation strategy
 ├── templates/                            # Reference templates (maintained per layer)
-│   ├── dimensions.md                     # Scoring standards routing index
+│   ├── dimensions-index.md               # Scoring standards routing index
 │   ├── dimensions-layer1.md              # Layer 1 scoring standards
 │   ├── dimensions-layer2.md              # Layer 2 scoring standards
-│   ├── prompts.md                        # Prompt templates routing index
+│   ├── prompts-index.md                  # Prompt templates routing index
 │   ├── prompts-layer1.md                 # Layer 1 prompt templates
 │   ├── prompts-layer2.md                 # Layer 2 prompt templates
-│   ├── report-formats.md                 # Report formats routing index + multi-Skill comparison
+│   ├── report-index.md                   # Report formats routing index + multi-Skill comparison
 │   ├── report-layer1.md                  # Layer 1 report formats
 │   ├── report-layer2.md                  # Layer 2 report formats
 │   └── report-layer3.md                  # Layer 3 report formats
@@ -241,17 +241,20 @@ skill-evaluator/
 After evaluation, reports are automatically saved as Markdown files:
 
 ```
-eval-results/
-├── eval-state.json                       # Incremental evaluation state file
-└── my-awesome-skill/
-    ├── layer1_2026-06-07_143025.md
-    ├── layer2_2026-06-07_150030.md
-    └── layer3_2026-06-07_160045.md
+{Target Skill Root}/
+├── eval-results/
+│   ├── eval-state.json                       # Incremental evaluation state file
+│   ├── layer1_2026-06-07_143025.md
+│   ├── layer2_2026-06-07_150030.md
+│   └── layer3_2026-06-07_160045.md
+├── SKILL.md
+└── ...
 ```
 
-- Default save directory: `./eval-results/`, customizable during pre-flight check
+- Reports are saved under the target Skill's root directory in `eval-results/`, customizable during pre-flight check
 - File naming: `layer{N}_{YYYY-MM-DD_HHmmss}.md`
 - Historical trend analysis is automatically generated when previous reports exist
+- Consider adding `eval-results/` to the target Skill's `.gitignore`
 
 ## CI Integration
 

@@ -236,13 +236,13 @@ skill-evaluator/
 │   ├── eval-state.md                     # 增量评估状态管理
 │   └── multi-model.md                    # 多模型交叉验证策略
 ├── templates/                            # 引用模板（按层独立维护）
-│   ├── dimensions.md                     # 评分标准路由索引
+│   ├── dimensions-index.md               # 评分标准路由索引
 │   ├── dimensions-layer1.md              # 第一层评分标准
 │   ├── dimensions-layer2.md              # 第二层评分标准
-│   ├── prompts.md                        # Prompt 模板路由索引
+│   ├── prompts-index.md                  # Prompt 模板路由索引
 │   ├── prompts-layer1.md                 # 第一层 Prompt 模板
 │   ├── prompts-layer2.md                 # 第二层 Prompt 模板
-│   ├── report-formats.md                 # 报告格式路由索引 + 多 Skill 对比
+│   ├── report-index.md                   # 报告格式路由索引 + 多 Skill 对比
 │   ├── report-layer1.md                  # 第一层报告格式
 │   ├── report-layer2.md                  # 第二层报告格式
 │   └── report-layer3.md                  # 第三层报告格式
@@ -264,17 +264,20 @@ skill-evaluator/
 评估完成后，报告自动保存为 Markdown 文件：
 
 ```
-eval-results/
-├── eval-state.json                       # 增量评估状态文件
-└── my-awesome-skill/
-    ├── layer1_2026-06-07_143025.md
-    ├── layer2_2026-06-07_150030.md
-    └── layer3_2026-06-07_160045.md
+{待评估 Skill 根目录}/
+├── eval-results/
+│   ├── eval-state.json                       # 增量评估状态文件
+│   ├── layer1_2026-06-07_143025.md
+│   ├── layer2_2026-06-07_150030.md
+│   └── layer3_2026-06-07_160045.md
+├── SKILL.md
+└── ...
 ```
 
-- 默认保存到 `./eval-results/`，可在预检时自定义路径
+- 报告存放在待评估 Skill 根目录下的 `eval-results/`，可在预检时自定义路径
 - 文件名格式：`layer{N}_{YYYY-MM-DD_HHmmss}.md`
 - 存在历史报告时，自动输出分数变化趋势
+- 建议在待评估 Skill 的 `.gitignore` 中添加 `eval-results/`
 
 ## CI 集成
 

@@ -1,6 +1,6 @@
 # 第一层：文件质量评估
 
-评估 Skill 体系内每个 .md 文件的写作质量。8 个加权维度，0-10 分制，S 级（>= 9.0）为唯一达标等级。
+评估 Skill 体系内每个 .md 文件的写作质量。LAYER1_DIMENSIONS 个加权维度，SCORE_RANGE 分制，S 级（>= PASSING_SCORE）为唯一达标等级。
 
 > **评分标准唯一来源**：`templates/dimensions-layer1.md`。多模型模式时，Prompt 模板详见 `templates/prompts-layer1.md`，报告格式详见 `templates/report-layer1.md`。
 > **增量评估**：评估范围由 `references/eval-state.md` 确定，跳过未变更文件。
@@ -194,8 +194,8 @@ Skill 是否内嵌了通用 Agent 不具备的专业知识、最佳实践和行�
 
 评估完成后，自动将报告保存为 Markdown 文件：
 
-- **保存路径**：`{评估结果根目录}/{Skill名称}/layer1_{YYYY-MM-DD_HHmmss}.md`
-- **默认根目录**：`./eval-results/`（相对于当前工作目录）
+- **保存路径**：`{待评估 Skill 根目录}/EVAL_RESULTS_DIR/layer1_{YYYY-MM-DD_HHmmss}.md`
+- **默认根目录**：`{待评估 Skill 根目录}/EVAL_RESULTS_DIR/`（报告存放在被评估的 Skill 目录下）
 - **路径不存在时**：自动创建目录
 - **保存内容**：完整评估报告（评分表 + 问题建议 + 历史趋势 + 增量评估摘要）
 

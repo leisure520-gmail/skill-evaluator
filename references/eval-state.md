@@ -21,9 +21,9 @@
 
 ### 文件位置
 
-`{评估结果根目录}/eval-state.json`
+`{待评估 Skill 根目录}/eval-results/eval-state.json`
 
-> 默认 `./eval-results/eval-state.json`，与评估报告同目录。
+> 评估状态文件与评估报告存放在同一目录（被评估 Skill 根目录下的 `eval-results/`）。
 
 ### JSON Schema
 

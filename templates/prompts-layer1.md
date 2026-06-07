@@ -8,6 +8,24 @@
 
 ---
 
+## 占位符参考表
+
+| 占位符 | 说明 | 示例 |
+|--------|------|------|
+| `{{DIMENSIONS}}` | 评分标准完整内容 | 从 `templates/dimensions-layer1.md` 粘贴 |
+| `{{SKILL_CONTENT}}` | 入口文件完整内容 | SKILL.md 的全部文本 |
+| `{{SUB_DOCS}}` | 子文档列表（含文件名和评估深度标注） | 按子文档 order 排序 |
+| `{{FILE_CONTENT}}` | 单个文件内容 | 子文档的完整文本 |
+| `{{RESOURCES}}` | 附带资源概况 | scripts/、references/、assets/ 目录文件列表 |
+| `{{TARGET_SKILL}}` | 目标 Skill 完整内容 | 用于交叉互审和视角评估 |
+| `{{MY_EVALUATION}}` | 当前模型的独立评估结果 | 评分表和理由 |
+| `{{OTHER_EVALUATIONS}}` | 其他模型的评估结果 | 逐个列出评分表 |
+| `{{PERSPECTIVE_A}}` | 严格派评估结果 | 评分表和分析 |
+| `{{PERSPECTIVE_B}}` | 务实派评估结果 | 评分表和分析 |
+| `{{PERSPECTIVE_C}}` | 专家派评估结果 | 评分表和分析 |
+
+---
+
 ### 独立评估 Prompt
 
 用于策略 A（subagent 并行）、策略 B（千帆 API）、策略 C（多视角）的独立评估阶段。
@@ -16,22 +34,22 @@
 你是一个 Skill 质量评估专家。请对以下 Skill 进行客观、严格的评估。
 
 ## 评分标准
-{从 templates/dimensions-layer1.md 粘贴完整内容}
+{{DIMENSIONS}}
 
 ## 待评估的 Skill 入口文件
-{SKILL.md 的完整内容}
+{{SKILL_CONTENT}}
 
 ## 待评估的子文档
-{每个子文档的完整内容，按 order 排序，标注文件名和评估深度}
+{{SUB_DOCS}}
 
 ### 01-base-entity.md（完整评估）
-{文件内容}
+{{FILE_CONTENT}}
 
 ### 99-workflows/create.md（轻量评估：D3+D7）
-{文件内容}
+{{FILE_CONTENT}}
 
 ## 附带资源概况
-{列出 scripts/、references/、assets/ 目录下的文件列表，如有}
+{{RESOURCES}}
 
 ## 评估要求
 
@@ -54,13 +72,13 @@
 你是一个 Skill 评估的交叉审查专家。你的任务是审查其他评估者对同一个 Skill 的评分，找出分歧并给出你的判断。
 
 ## 原始 Skill 内容
-{目标 Skill 的完整内容}
+{{TARGET_SKILL}}
 
 ## 你的独立评估结果
-{该模型在独立评估阶段的评分和理由}
+{{MY_EVALUATION}}
 
 ## 其他模型的评估结果
-{其他模型的评分表，逐个列出}
+{{OTHER_EVALUATIONS}}
 
 ## 审查要求
 
@@ -92,10 +110,10 @@
 请按以下标准对 Skill 进行严格评估：
 
 ## 评分标准
-{从 templates/dimensions-layer1.md 粘贴完整内容}
+{{DIMENSIONS}}
 
 ## 待评估的 Skill
-{目标 Skill 的完整内容}
+{{TARGET_SKILL}}
 
 ## 评估要求
 
@@ -120,10 +138,10 @@
 请按以下标准对 Skill 进行务实评估：
 
 ## 评分标准
-{从 templates/dimensions-layer1.md 粘贴完整内容}
+{{DIMENSIONS}}
 
 ## 待评估的 Skill
-{目标 Skill 的完整内容}
+{{TARGET_SKILL}}
 
 ## 评估要求
 1. 对入口文件（SKILL.md）按 D1-D8 共 8 个维度逐一打分，以务实可用为标准
@@ -147,10 +165,10 @@
 请按以下标准对 Skill 进行专家视角评估：
 
 ## 评分标准
-{从 templates/dimensions-layer1.md 粘贴完整内容}
+{{DIMENSIONS}}
 
 ## 待评估的 Skill
-{目标 Skill 的完整内容}
+{{TARGET_SKILL}}
 
 ## 评估要求
 1. 对入口文件（SKILL.md）按 D1-D8 共 8 个维度逐一打分，重点关注专业深度
@@ -170,13 +188,13 @@
 你已经以三个不同视角完成了对同一个 Skill 的独立评估：
 
 ### 视角 A（严格派）的评估结果
-{视角 A 的评分表和分析}
+{{PERSPECTIVE_A}}
 
 ### 视角 B（务实派）的评估结果
-{视角 B 的评分表和分析}
+{{PERSPECTIVE_B}}
 
 ### 视角 C（专家派）的评估结果
-{视角 C 的评分表和分析}
+{{PERSPECTIVE_C}}
 
 ## 审查要求
 

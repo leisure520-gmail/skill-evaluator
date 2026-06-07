@@ -6,24 +6,39 @@
 
 ---
 
+## 占位符参考表
+
+| 占位符 | 说明 | 示例 |
+|--------|------|------|
+| `{{DIMENSIONS}}` | 评分标准完整内容 | 从 `templates/dimensions-layer2.md` 粘贴 |
+| `{{CATEGORY_NAME}}` | 分类名称 | 入口文件所在目录名 |
+| `{{SUB_DOC_COUNT}}` | 子文档数量 | 整数 |
+| `{{SKILL_CONTENT}}` | 入口文件完整内容 | SKILL.md 的全部文本 |
+| `{{SUB_DOCS}}` | 子文档列表（按 order 排序） | 每个子文档的完整内容 |
+| `{{CATEGORY_FILES}}` | 分类内所有文件完整内容 | 用于交叉互审和视角评估 |
+| `{{MY_EVALUATION}}` | 当前模型的独立评估结果 | 评分表和理由 |
+| `{{OTHER_EVALUATIONS}}` | 其他模型的评估结果 | 逐个列出评分表 |
+
+---
+
 ### 独立评估 Prompt
 
 ```
 你是一个 Skill 体系一致性评估专家。你的任务是评估同一分类下所有文件之间是否协调一致——有无冲突、重叠、遗漏。
 
 ## 评分标准
-{从 templates/dimensions-layer2.md 粘贴完整内容}
+{{DIMENSIONS}}
 
 ## 待评估的分类
-- 分类名称：{category_name}
+- 分类名称：{{CATEGORY_NAME}}
 - 入口文件：SKILL.md
-- 子文档数量：{N} 个
+- 子文档数量：{{SUB_DOC_COUNT}} 个
 
 ### 入口文件：SKILL.md
-{SKILL.md 的完整内容}
+{{SKILL_CONTENT}}
 
 ### 子文档列表
-{每个子文档的完整内容，按 order 排序}
+{{SUB_DOCS}}
 
 ## 评估要求
 
@@ -47,13 +62,13 @@
 你是一个分类一致性评估的交叉审查专家。你的任务是审查其他评估者对同一分类的一致性评分，找出分歧并给出你的判断。
 
 ## 原始分类内容
-{该分类所有文件的完整内容}
+{{CATEGORY_FILES}}
 
 ## 你的独立评估结果
-{该模型在独立评估阶段的评分和理由}
+{{MY_EVALUATION}}
 
 ## 其他模型的评估结果
-{其他模型的评分表，逐个列出}
+{{OTHER_EVALUATIONS}}
 
 ## 审查要求
 
@@ -83,10 +98,10 @@
 请按以下标准对该分类进行严格评估：
 
 ## 评分标准
-{从 templates/dimensions-layer2.md 粘贴完整内容}
+{{DIMENSIONS}}
 
 ## 待评估的分类
-{该分类所有文件的完整内容}
+{{CATEGORY_FILES}}
 
 ## 评估要求
 1. 对该分类按 D1-D8 共 8 个维度逐一打分，以严格标准审视
@@ -109,10 +124,10 @@
 请按以下标准对该分类进行务实评估：
 
 ## 评分标准
-{从 templates/dimensions-layer2.md 粘贴完整内容}
+{{DIMENSIONS}}
 
 ## 待评估的分类
-{该分类所有文件的完整内容}
+{{CATEGORY_FILES}}
 
 ## 评估要求
 1. 对该分类按 D1-D8 共 8 个维度逐一打分，以务实可用为标准
@@ -135,10 +150,10 @@
 请按以下标准对该分类进行专家视角评估：
 
 ## 评分标准
-{从 templates/dimensions-layer2.md 粘贴完整内容}
+{{DIMENSIONS}}
 
 ## 待评估的分类
-{该分类所有文件的完整内容}
+{{CATEGORY_FILES}}
 
 ## 评估要求
 1. 对该分类按 D1-D8 共 8 个维度逐一打分，重点关注知识体系完整性

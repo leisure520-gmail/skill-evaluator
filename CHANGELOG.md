@@ -2,95 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.1.0] - 2026-06-07
+## [1.0.0] - 2026-06-07
 
 ### Added
 
-- **三层评估体系**：从"双轨"升级为"三层"，新增第二层（分类一致性评估）
-- **第二层：分类一致性评估**（8 维度）：评估同一分类下文件之间是否协调——有无冲突、重叠、遗漏
-- **第二层 8 维度**：D1 职责边界、D2 术语一致性、D3 交叉引用、D4 知识覆盖度、D5 冗余检测、D6 层级结构、D7 元数据一致性、D8 工作流闭环
-- **第二层 Prompt 模板**：独立评估、交叉互审、三视角评审模板
-- **第二层报告格式**：单模型、多模型、多视角三种报告格式
-- `references/layer2-consistency.md`：分类一致性评估文档
-
-### Changed
-
-- **术语重命名**：轨道一/轨道二 → 第一层/第二层/第三层，双轨评估体系 → 三层评估体系
-- **文件重命名**：`track1-quality.md` → `layer1-quality.md`，`track2-architecture.md` → `layer3-architecture.md`
-- **第三层维度调整**：从 13 维度精简为 12 维度，D13（子文档一致性）移至第二层 D7
-- **第三层权重重分配**：D3 从 15% 调整为 12%，D5 从 8% 调整为 10%，D10 从 6% 调整为 7%，D12 从 10% 不变，总权重 100%
-- SKILL.md 从 v3.0.0 升级至 v3.1.0，评估体系从双轨改为三层
-- `templates/dimensions.md` 增加第二层 8 维度评分标准
-- `templates/prompts.md` 增加第二层 Prompt 模板
-- `templates/report-formats.md` 增加第二层报告格式
-- CI 配置更新术语：track1 → layer1
-
-## [3.0.0] - 2026-06-07
-
-### Added
-
-- **全量文件扫描**：评估范围从仅 SKILL.md 扩展为 SKILL.md + 所有子文档
-- **增量评估机制**：基于内容指纹（SHA-256）检测文件变更，跳过未变更文件，仅评估新增/修改文件
-- **评估状态文件**（eval-state.json）：记录每个文件的指纹、评分、评估时间，支持增量评估
-- **评估深度分级**：入口文件和有 frontmatter 的子文档完整评估（D1-D8），无 frontmatter 的子文档轻量评估（D3+D7）
-- **自动文件发现**：递归扫描 .md 文件，自动识别入口文件/子文档/根目录文件角色，不硬编码目录结构
-- **D13 子文档一致性**：轨道二新增维度，检查子文档 frontmatter 与路由表一致性、孤立文件、幽灵引用
-- **分类级评分聚合**：每个分类输出平均分和最低分，达标条件为平均分 >= 9.0 且最低分 >= 7.0
-- `references/eval-state.md`：增量评估状态管理文档
-
-### Changed
-
-- SKILL.md 从 v2.0.0 升级至 v3.0.0，评估对象从"单个 SKILL.md"扩展为"全量文件"
-- 轨道一从"单文件质量评估"更名为"全量质量评估"
-- 轨道二从 12 维度扩展为 13 维度，D1 增加子文档 frontmatter 检查，D2 增加子文档 level 一致性检查
-- 轨道二评分权重重新分配，D13 占 5%
-- `templates/dimensions.md` 增加轻量评估（D3+D7）评分标准
-- `templates/report-formats.md` 增加子文档评分总览表、分类级评分、增量评估摘要
-- `templates/prompts.md` 评估 Prompt 扩展为包含入口文件和子文档
-- 全局硬性约束增加"全量覆盖"、"增量可追溯"、"不假设体系结构"三条
-
-## [2.0.0] - 2026-06-07
-
-### Added
-
-- 多模型交叉验证能力（策略 A：subagent 并行多模型）
-- 千帆 API 多模型调用能力（策略 B）
-- 混合模式（策略 A+B）：原生模型 + 千帆 API 并行
-- 串行多视角回退模式（策略 C）：严格派/务实派/专家派
-- 自动策略降级：A -> B -> C，对用户透明
-- 模型配置选择流程，支持自定义主模型和评估模型列表
-- 千帆 API Token 持久化配置（config.json）
-- `templates/` 目录：dimensions.md、prompts.md、report-formats.md
-- `scripts/qianfan_chat.py` 千帆 API 调用脚本
-- 多 Skill 对比功能
-- 项目发布文件：README.md、README_EN.md、.gitignore、CHANGELOG.md、LICENSE
-- 评估结果持久化：自动保存报告到 `eval-results/` 目录
-- 历史趋势对比：多次评估同一 Skill 时自动输出分数变化趋势
-- CI 集成配置：GitHub Actions 和 GitLab CI 示例（`ci/` 目录）
-- SKILL.md「使用场景」章节
-- README 输出示例（单模型 + 多模型报告）
-- README License Badge 和贡献指南
-
-### Changed
-
-- SKILL.md 从 v1.0.0 升级至 v2.0.0，补充 `order` 字段，增加「使用场景」章节
-- 评估模式从单模型扩展为单模型/多模型/多视角三种模式
-- 评估流程增加模型配置和策略选择步骤
-- 报告格式扩展支持多模型报告和多视角报告
-- 统一评分标准：`templates/dimensions.md` 为轨道一唯一评分标准源，`track1-quality.md` 不再重复评分细则
-- 统一等级映射：双轨共用 S/A/B/C/D 五级标准，消除轨道二原有的 F 级和不同分界线
-- `track1-quality.md` 报告格式改为引用 `templates/report-formats.md`，消除重复
-- `templates/` 下三个文件头部注明适用范围为轨道一
-- `multi-model.md` 补充模型选择交互细节和 Token 检测流程
-- README.md / README_EN.md 增加 License Badge、输出示例和贡献指南
-
-## [1.0.0] - 2026-04-13
-
-### Added
-
-- 双轨制评估体系：轨道一（单文件 8 维度）+ 轨道二（体系架构 12 维度）
-- 8 维度单文件质量评估框架
-- 12 维度体系架构评估框架
-- S/A/B/C/D 等级映射
-- 改进建议输出
-- 独立性声明与硬性约束
+- **三层评估体系**：文件质量层（8 维度）→ 分类一致性层（8 维度）→ 体系架构层（12 维度），严格递进执行
+- **第一层：文件质量评估**（8 维度）：D1 元数据质量、D2 执行引导清晰度、D3 领域知识密度、D4 工作流完整性、D5 输入输出清晰度、D6 资源利用、D7 写作质量、D8 范围与聚焦
+- **第二层：分类一致性评估**（8 维度）：D1 职责边界、D2 术语一致性、D3 交叉引用、D4 知识覆盖度、D5 冗余检测、D6 层级结构、D7 元数据一致性、D8 工作流闭环
+- **第三层：体系架构评估**（12 维度）：模块化封装、可组合性、知识独立性、可观测性、防御性设计、演进友好、一致性、可测试性、可调试性、文档完整性、边界管理、成熟度评估
+- **分类自动发现**：递归扫描 SKILL.md 识别分类，无需硬编码目录结构
+- **评估深度分级**：入口文件/有 frontmatter 子文档完整评估（D1-D8），无 frontmatter 子文档轻量评估（D3+D7）
+- **增量评估机制**：基于内容指纹（SHA-256）检测文件变更，跳过未变更文件
+- **多模型交叉验证**：策略 A（subagent 并行多模型）→ 策略 B（千帆 API 多模型）→ 策略 C（串行多视角），自动降级
+- **多 Skill 对比**：并列评分表、优劣势分析、经验总结、排名
+- **S/A/B/C/D 等级映射**：S 级（≥9.0）为唯一达标等级
+- `references/` 目录：layer1-quality.md、layer2-consistency.md、layer3-architecture.md、eval-state.md、multi-model.md
+- `templates/` 目录：按层独立维护的评分标准、Prompt 模板、报告格式
+- `scripts/qianfan_chat.py`：千帆 API 调用脚本
+- `ci/` 目录：GitHub Actions 和 GitLab CI 配置
+- 项目发布文件：README.md、README_EN.md、.gitignore、LICENSE
