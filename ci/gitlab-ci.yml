@@ -12,6 +12,7 @@ skill-evaluation:
       - "**/SKILL.md"
       - "**/references/**"
       - "**/templates/**"
+      - "**/*.md"
   except:
     changes:
       - "skill-evaluator/**"
@@ -33,6 +34,13 @@ skill-evaluation:
       fi
 
       mkdir -p eval-results
+
+      # Restore eval-state.json for incremental evaluation
+      if [ -f "eval-results/eval-state.json" ]; then
+        echo "Found existing eval-state.json, incremental evaluation enabled."
+      else
+        echo "No eval-state.json found, will perform full evaluation."
+      fi
 
       for SKILL in $SKILLS; do
         SKILL_DIR=$(dirname "$SKILL")

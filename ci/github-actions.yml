@@ -1,4 +1,4 @@
-name: Skill Evaluation
+name: Skill Evaluation (v3.0 — 全量扫描 + 增量评估)
 
 on:
   push:
@@ -6,11 +6,13 @@ on:
       - '**/SKILL.md'
       - '**/references/**'
       - '**/templates/**'
+      - '**/*.md'
   pull_request:
     paths:
       - '**/SKILL.md'
       - '**/references/**'
       - '**/templates/**'
+      - '**/*.md'
   workflow_dispatch:
     inputs:
       skill_path:
@@ -33,13 +35,13 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Run Skill Evaluation (Track 1)
+      - name: Run Skill Evaluation (Track 1 — Full Scan)
         env:
           QIANFAN_BEARER_TOKEN: ${{ secrets.QIANFAN_BEARER_TOKEN }}
         run: |
           SKILL_PATH="${{ github.event.inputs.skill_path || '.' }}"
 
-          # Find all SKILL.md files (excluding skill-evaluator itself)
+          # Find all SKILL.md files (excluding skill-evaluator itself and eval-results)
           if [ "$SKILL_PATH" = "." ]; then
             SKILLS=$(find . -name 'SKILL.md' -not -path './SKILL.md' -not -path './eval-results/*')
           else
@@ -52,6 +54,13 @@ jobs:
           fi
 
           mkdir -p eval-results
+
+          # Restore eval-state.json for incremental evaluation
+          if [ -f "eval-results/eval-state.json" ]; then
+            echo "Found existing eval-state.json, incremental evaluation enabled."
+          else
+            echo "No eval-state.json found, will perform full evaluation."
+          fi
 
           for SKILL in $SKILLS; do
             SKILL_DIR=$(dirname "$SKILL")

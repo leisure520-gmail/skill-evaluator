@@ -75,7 +75,7 @@
 | `files` | object | 文件级评估状态，key 为相对路径 |
 | `files.*.fingerprint` | string | 内容指纹，格式 `sha256:{hex}` |
 | `files.*.role` | string | 文件角色：`entry` / `sub-doc` / `root` |
-| `files.*.category` | string | 所属分类（入口文件所在目录名） |
+| `files.*.category` | string | 所属分类。入口文件所在目录名；若入口文件在根目录，则使用入口文件名（不含扩展名） |
 | `files.*.last_eval_time` | string | 该文件最近评估时间 |
 | `files.*.eval_depth` | string | 评估深度：`full`（D1-D8）/ `light`（部分维度） |
 | `files.*.scores` | object | 各维度评分，轻量评估仅包含评估过的维度 |

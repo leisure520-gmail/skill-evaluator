@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- **全量文件扫描**：评估范围从仅 SKILL.md 扩展为 SKILL.md + 所有子文档 + 根目录文件
+- **全量文件扫描**：评估范围从仅 SKILL.md 扩展为 SKILL.md + 所有子文档
 - **增量评估机制**：基于内容指纹（SHA-256）检测文件变更，跳过未变更文件，仅评估新增/修改文件
 - **评估状态文件**（eval-state.json）：记录每个文件的指纹、评分、评估时间，支持增量评估
 - **评估深度分级**：入口文件和有 frontmatter 的子文档完整评估（D1-D8），无 frontmatter 的子文档轻量评估（D3+D7）
