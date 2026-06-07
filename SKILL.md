@@ -22,18 +22,18 @@ order: 0
 
 > 共享常量定义见 `references/config.md`，以下仅列出关键配置项。
 
-### 千帆 API（策略 B）
+### DeepSeek API（策略 B）
 
-多模型模式通过百度千帆大模型平台 API 调用模型时，需要认证 Token（格式 `TOKEN_PREFIX...`）。
+多模型模式通过 DeepSeek API 调用模型时，需要认证 API Key（格式 `sk-...`）。
 
-**Token 检测优先级**：
+**API Key 检测优先级**：
 1. **CONFIG_FILE**：读取 Skill 目录下 `config.json` 的 `TOKEN_FIELD` 字段
 2. **环境变量**：`TOKEN_ENV_VAR`
 3. **询问用户**：上述均未获取到时提示用户提供
 
-**持久化**：获取到 Token 后自动写入 `CONFIG_FILE`，后续评估不再重复询问。
+**持久化**：获取到 API Key 后自动写入 `CONFIG_FILE`，后续评估不再重复询问。
 
-> 详细流程和 config.json 读写方式见 `references/multi-model.md`「千帆 API 配置」章节。
+> 详细流程和 config.json 读写方式见 `references/multi-model.md`「DeepSeek API 配置」章节。
 
 ## 独立性声明
 

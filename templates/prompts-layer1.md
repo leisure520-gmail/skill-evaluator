@@ -28,7 +28,7 @@
 
 ### 独立评估 Prompt
 
-用于策略 A（subagent 并行）、策略 B（千帆 API）、策略 C（多视角）的独立评估阶段。
+用于策略 A（subagent 并行）、策略 B（DeepSeek API）、策略 C（多视角）的独立评估阶段。
 
 ```
 你是一个 Skill 质量评估专家。请对以下 Skill 进行客观、严格的评估。

@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
-"""Qianfan API chat client for skill-evaluator.
+"""DeepSeek API chat client for skill-evaluator.
 
-Calls Baidu Qianfan LLM platform (OpenAI-compatible v2 API).
+Calls DeepSeek API (OpenAI-compatible).
 Supports single-model, batch-parallel, and per-model-prompt modes. Zero external dependencies.
 
 Usage:
   # Single model (stdout = plain text)
-  python qianfan_chat.py --model ernie-5.0 --prompt "Hello"
-  python qianfan_chat.py --model ernie-5.0 --prompt-file /tmp/prompt.txt
+  python deepseek_chat.py --model deepseek-chat --prompt "Hello"
+  python deepseek_chat.py --model deepseek-chat --prompt-file /tmp/prompt.txt
 
   # Batch parallel, shared prompt (stdout = JSON)
-  python qianfan_chat.py --models ernie-5.0,deepseek-v3.2 --prompt "Hello"
-  python qianfan_chat.py --models ernie-5.0,deepseek-v3.2 --prompt-file /tmp/prompt.txt
+  python deepseek_chat.py --models deepseek-chat,deepseek-reasoner --prompt "Hello"
+  python deepseek_chat.py --models deepseek-chat,deepseek-reasoner --prompt-file /tmp/prompt.txt
 
   # Batch parallel, per-model prompts (stdout = JSON)
-  python qianfan_chat.py --prompt-files ernie-5.0:/tmp/p1.txt,deepseek-v3.2:/tmp/p2.txt
+  python deepseek_chat.py --prompt-files deepseek-chat:/tmp/p1.txt,deepseek-reasoner:/tmp/p2.txt
 
 Environment:
-  QIANFAN_BEARER_TOKEN  Bearer token for authentication (bce-v3/... format)
+  DEEPSEEK_API_KEY  API key for authentication (sk-... format)
 """
 
 import argparse
@@ -28,12 +28,12 @@ import threading
 import urllib.error
 import urllib.request
 
-DEFAULT_ENDPOINT = "https://qianfan.baidubce.com/v2/chat/completions"
+DEFAULT_ENDPOINT = "https://api.deepseek.com/v1/chat/completions"
 DEFAULT_TIMEOUT = 120
 
 
 def call_model(endpoint, token, model, prompt, timeout):
-    """Call a single model via Qianfan API. Returns (content, None) or (None, error_msg)."""
+    """Call a single model via DeepSeek API. Returns (content, None) or (None, error_msg)."""
     body = json.dumps({
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
@@ -143,7 +143,7 @@ def parse_prompt_files(value):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Qianfan API chat client")
+    parser = argparse.ArgumentParser(description="DeepSeek API chat client")
     model_group = parser.add_mutually_exclusive_group(required=True)
     model_group.add_argument("--model", help="Single model ID")
     model_group.add_argument("--models", help="Comma-separated model IDs for batch parallel (shared prompt)")
@@ -154,16 +154,16 @@ def main():
     prompt_group.add_argument("--prompt", help="Prompt text")
     prompt_group.add_argument("--prompt-file", help="Path to file containing prompt")
 
-    parser.add_argument("--token", help="Bearer token (default: QIANFAN_BEARER_TOKEN env)")
+    parser.add_argument("--token", help="API key (default: DEEPSEEK_API_KEY env)")
     parser.add_argument("--endpoint", default=DEFAULT_ENDPOINT, help="API endpoint URL")
     parser.add_argument("--timeout", type=int, default=DEFAULT_TIMEOUT, help="Request timeout in seconds")
     parser.add_argument("--retry", type=int, default=0, help="Number of retries for failed requests (default: 0)")
 
     args = parser.parse_args()
 
-    token = args.token or os.environ.get("QIANFAN_BEARER_TOKEN")
+    token = args.token or os.environ.get("DEEPSEEK_API_KEY")
     if not token:
-        print("Error: No token provided. Set QIANFAN_BEARER_TOKEN or use --token.", file=sys.stderr)
+        print("Error: No API key provided. Set DEEPSEEK_API_KEY or use --token.", file=sys.stderr)
         sys.exit(1)
 
     # --prompt-files mode: each model has its own prompt file

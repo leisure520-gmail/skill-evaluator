@@ -39,16 +39,16 @@
 
 ---
 
-## 3. 千帆 API 配置
+## 3. DeepSeek API 配置
 
 | 变量名 | 当前值 | 说明 | 示例 |
 |------|------|------|------|
 | `CONFIG_FILE` | `config.json` | Token 配置文件名（位于 Skill 目录下） | `config.json` |
-| `TOKEN_FIELD` | `qianfan_token` | config.json 中 Token 字段名 | `qianfan_token` |
-| `TOKEN_PREFIX` | `bce-v3/` | 有效 Token 前缀 | `bce-v3/` |
-| `TOKEN_ENV_VAR` | `QIANFAN_BEARER_TOKEN` | Token 环境变量名 | `QIANFAN_BEARER_TOKEN` |
+| `TOKEN_FIELD` | `deepseek_api_key` | config.json 中 API Key 字段名 | `deepseek_api_key` |
+| `TOKEN_PREFIX` | `sk-` | 有效 API Key 前缀 | `sk-` |
+| `TOKEN_ENV_VAR` | `DEEPSEEK_API_KEY` | API Key 环境变量名 | `DEEPSEEK_API_KEY` |
 
-**Token 检测优先级**：config.json → 环境变量 → 询问用户
+**API Key 检测优先级**：config.json → 环境变量 → 询问用户
 
 ---
 

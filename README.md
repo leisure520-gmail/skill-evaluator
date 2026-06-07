@@ -2,26 +2,119 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) | [English](README_EN.md)
 
-一个用于评估 AI Agent Skill 质量的 Skill。采用**三层评估**设计：第一层（文件质量 8 维度）→ 第二层（分类一致性 8 维度）→ 第三层（体系架构 12 维度），严格递进执行，低层达标后方可进入高层评估。支持全量文件扫描、增量评估、多模型交叉验证、千帆 API 多模型调用、串行多视角回退，提供三种执行策略按优先级自动降级，确保跨平台可用。
+> AI Agent Skill 质量评估工具 — 三层递进评估 + 多模型交叉验证 + 增量评估
 
 兼容所有支持 Skill 机制的 AI Agent 平台，包括但不限于 Claude Code、Ducc、小龙虾等。
 
+## 目录
+
+- [特性](#特性)
+- [快速开始](#快速开始)
+- [使用方式](#使用方式)
+- [架构](#架构)
+- [项目结构](#项目结构)
+- [输出示例](#输出示例)
+- [CI 集成](#ci-集成)
+- [贡献](#贡献)
+- [License](#license)
+
 ## 特性
 
-- **三层评估** — 第一层（文件质量 8 维度）→ 第二层（分类一致性 8 维度）→ 第三层（体系架构 12 维度），严格递进执行
-- **全量文件扫描** — 自动发现所有 .md 文件，按入口文件/子文档/根目录文件分类，不硬编码目录结构
-- **增量评估** — 基于内容指纹（SHA-256）跳过未变更文件，仅评估新增/修改文件
-- **评估深度分级** — 入口文件和有 frontmatter 的子文档完整评估（D1-D8），无 frontmatter 的子文档轻量评估（D3+D7）
-- **多维度打分** — 第一层 8 维度，第二层 8 维度，第三层 12 维度，每个维度 0-10 分
-- **等级映射** — 综合得分自动映射为 S/A/B/C/D 等级，S 级（>= 9.0）为唯一达标等级
-- **改进建议** — 对每个薄弱维度给出问题描述、影响分析和可执行建议
+- **三层递进评估** — 文件质量（8 维度）→ 分类一致性（8 维度）→ 体系架构（12 维度），低层达标后方可进入高层
+- **增量评估** — 基于内容指纹（SHA-256）跳过未变更文件
+- **多模型交叉验证** — 独立评估 → 两两互审 → 仲裁裁定，三种策略自动降级（A→B→C）
+- **DeepSeek API 多模型** — 通过 DeepSeek API 并行调用多个真实模型，不依赖 subagent
 - **多 Skill 对比** — 并列评分表、优劣势分析和排名
-- **多模型交叉验证** — 多个模型独立评估 -> 两两互审挑毛病 -> 仲裁者综合裁定，提升评估权威性
-- **千帆 API 多模型** — 通过百度千帆大模型平台 API 调用多个真实模型，不依赖 subagent 机制
-- **串行多视角回退** — 策略 A/B 均不可用时自动切换：同一模型以严格派/务实派/专家派三视角独立评估
-- **自动策略降级** — A（subagent 并行）-> B（千帆 API）-> C（串行多视角），对用户透明
+- **S/A/B/C/D 等级映射** — S 级（≥9.0）为唯一达标等级
+- **改进建议** — 对每个薄弱维度给出问题描述、影响分析和可执行建议
 
-## 三层评估体系
+## 快速开始
+
+### 安装
+
+```bash
+# 方式 1：skill install（如果平台支持）
+claude skill install skill-evaluator --from github:jasonzhuo/skill-evaluator
+
+# 方式 2：手动克隆
+git clone https://github.com/jasonzhuo/skill-evaluator.git ~/.claude/skills/skill-evaluator
+```
+
+其他 Agent 平台请将 `SKILL.md` 放置到对应的 Skill 目录下。
+
+### 配置
+
+策略 B（DeepSeek API 多模型）需要 API Key，未配置时自动降级到策略 C：
+
+```bash
+# 方式 1：配置文件（推荐）
+echo '{"deepseek_api_key": "sk-your-api-key-here"}' > config.json
+
+# 方式 2：环境变量
+export DEEPSEEK_API_KEY="sk-your-api-key-here"
+```
+
+### 基本用法
+
+通过斜杠命令调用（如果你的 Agent 支持）：
+
+```
+/skill-evaluator
+```
+
+或用自然语言：
+
+```
+帮我评估一下 my-awesome-skill
+```
+
+## 使用方式
+
+### 评估单个 Skill
+
+```
+帮我评估一下 my-awesome-skill 这个 Skill
+```
+
+### 对比多个 Skill
+
+```
+对比 skill-a 和 skill-b，哪个设计更好
+```
+
+### 按路径评估
+
+```
+评估 ~/projects/my-skill/SKILL.md 这个 Skill
+```
+
+### 多模型交叉验证
+
+```
+用多模型交叉验证评估 my-awesome-skill
+```
+
+### 自定义模型列表
+
+```
+用 sonnet 和 deepseek-chat 交叉验证评估 my-awesome-skill
+```
+
+### 多视角模式
+
+```
+用多视角模式评估 my-awesome-skill
+```
+
+### 评估体系架构
+
+```
+评估 my-skill-system 的体系架构
+```
+
+## 架构
+
+### 三层评估体系
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -51,9 +144,9 @@
 └─────────────────────────────────────────────────────────┘
 ```
 
-## 评估维度
+### 评估维度
 
-### 第一层：文件质量评估（8 维度）
+#### 第一层：文件质量评估（8 维度）
 
 | 维度 | 权重 | 说明 |
 |---|---|---|
@@ -66,7 +159,7 @@
 | D7. 写作质量 | 10% | 结构清晰度、可读性和表述精确性 |
 | D8. 范围与聚焦 | 10% | 是否专注解决一类问题，既不过宽也不过窄 |
 
-### 第二层：分类一致性评估（8 维度）
+#### 第二层：分类一致性评估（8 维度）
 
 | 维度 | 权重 | 说明 |
 |---|---|---|
@@ -79,7 +172,7 @@
 | D7. 元数据一致性 | 15% | 子文档 frontmatter 与路由表一致，无孤立/幽灵 |
 | D8. 工作流闭环 | 15% | 入口文件声明的工作流被子文档完整覆盖 |
 
-### 第三层：体系架构评估（12 维度）
+#### 第三层：体系架构评估（12 维度）
 
 | 维度 | 权重 | 说明 |
 |---|---|---|
@@ -96,117 +189,36 @@
 | D11. 场景适配 | 10% | 轻量模式，合规强度与任务复杂度匹配 |
 | D12. 规范持续维护 | 10% | 自动检测、CHANGELOG、审批流程 |
 
-## 等级标准
+### 等级标准
 
 三层评估共用同一等级映射：
 
 | 分数 | 等级 | 含义 |
 |---|---|---|
-| 9.0-10 | S | 卓越 -- 标杆级（唯一达标等级） |
-| 7.5-8.9 | A | 优秀 -- 可直接使用，仅需少量打磨 |
-| 6.0-7.4 | B | 合格 -- 可用但有明显改进空间 |
-| 4.0-5.9 | C | 较弱 -- 需要大幅修改 |
-| 0-3.9 | D | 较差 -- 存在根本性问题，建议重新设计 |
+| 9.0-10 | S | 卓越 — 标杆级（唯一达标等级） |
+| 7.5-8.9 | A | 优秀 — 可直接使用，仅需少量打磨 |
+| 6.0-7.4 | B | 合格 — 可用但有明显改进空间 |
+| 4.0-5.9 | C | 较弱 — 需要大幅修改 |
+| 0-3.9 | D | 较差 — 存在根本性问题，建议重新设计 |
 
-## 安装
+### 交叉验证策略
 
-### Claude Code / Ducc
+根据执行条件自动选择策略（A → B → C 降级）：
 
-```bash
-# 若平台支持 skill install 命令
-claude skill install skill-evaluator --from github:jasonzhuo/skill-evaluator
+| 策略 | 方式 | 依赖 | 说明 |
+|------|------|------|------|
+| **A** | subagent 并行多模型 | Agent 工具 + model 参数 | 默认，效果最佳 |
+| **B** | DeepSeek API 多模型 | Bash + Python + DeepSeek API Key | 不依赖 subagent |
+| **C** | 串行多视角 | 无外部依赖 | 回退方案，同一模型以严格派/务实派/专家派三视角评估 |
 
-# 或手动克隆
-git clone https://github.com/jasonzhuo/skill-evaluator.git ~/.claude/skills/skill-evaluator
-```
-
-### 手动安装
-
-将 `SKILL.md` 及 `references/`、`templates/`、`scripts/` 目录复制到你的 Agent 的 Skill 目录。以 Claude Code / Ducc 为例：
-
-```bash
-git clone https://github.com/jasonzhuo/skill-evaluator.git ~/.claude/skills/skill-evaluator
-```
-
-其他 Agent 平台请将 `SKILL.md` 放置到对应的 Skill 目录下。
-
-## 配置
-
-### 千帆 API（策略 B）
-
-策略 B 通过百度千帆大模型平台 API 调用多个真实模型，需提前配置认证 Token。Token 可通过以下方式配置：
-
-1. **Skill 配置文件**（推荐）：在 Skill 目录下创建 `config.json`，写入 `{"qianfan_token": "bce-v3/your-token-here"}`
-2. **环境变量**：`export QIANFAN_BEARER_TOKEN="bce-v3/your-token-here"`
-
-Token 未配置时策略 B 不可用，多模型模式会自动降级到策略 C（串行多视角）。
-
-## 使用
-
-通过斜杠命令调用（如果你的 Agent 支持）：
-
-```
-/skill-evaluator
-```
-
-也可以直接用自然语言描述意图：
-
-### 评估单个 Skill
-
-```
-帮我评估一下 my-awesome-skill 这个 Skill
-```
-
-### 对比多个 Skill
-
-```
-对比 skill-a 和 skill-b，哪个设计更好
-```
-
-### 按路径评估
-
-```
-评估 ~/projects/my-skill/SKILL.md 这个 Skill
-```
-
-### 多模型交叉验证
-
-```
-用多模型交叉验证评估 my-awesome-skill
-```
-
-### 自定义模型列表
-
-```
-用 sonnet 和 GLM-5 交叉验证评估 my-awesome-skill
-```
-
-### 多视角模式
-
-```
-用多视角模式评估 my-awesome-skill
-```
-
-### 评估 Skill 体系架构
-
-```
-评估 my-skill-system 的体系架构
-```
-
-## 交叉验证流程
-
-根据执行情况自动选择策略（A -> B -> C 降级）：
-
-### 策略 A：并行多模型（默认）
+**策略 A 流程**：
 
 ```
 ┌──────────────────────────────────────────────────────┐
-│ 第零阶段：确认模型配置（询问用户）                      │
-│ 主模型（仲裁者）：默认当前 Agent                       │
-│ 评估模型列表：默认 Sonnet / GLM-5 / MiniMax            │
+│ 确认模型配置（主模型 + 评估模型列表）                  │
 ├──────────────────────────────────────────────────────┤
 │ 第一阶段：并行独立评估                                  │
-│ [Sonnet 评估] [GLM-5 评估] [MiniMax 评估]             │
+│ [模型1 评估] [模型2 评估] [模型3 评估]                 │
 ├──────────────────────────────────────────────────────┤
 │ 第二阶段：两两交叉互审                                  │
 │ 每个模型审查其他模型的评分，找出分歧 >= 2 分的维度       │
@@ -215,14 +227,6 @@ Token 未配置时策略 B 不可用，多模型模式会自动降级到策略 C
 │ 仲裁者基于一致/多数/仲裁三级规则给出最终结论             │
 └──────────────────────────────────────────────────────┘
 ```
-
-### 策略 B：千帆 API 多模型
-
-通过千帆 API 并行调用 ernie-5.0、deepseek-v3.2、qwen3.5、glm-5.1 等模型，评估流程与策略 A 一致。
-
-### 策略 C：串行多视角
-
-同一模型依次扮演严格派、务实派、专家派三个评审视角，然后自我交叉审查和仲裁。
 
 ## 项目结构
 
@@ -236,22 +240,15 @@ skill-evaluator/
 │   ├── eval-state.md                     # 增量评估状态管理
 │   └── multi-model.md                    # 多模型交叉验证策略
 ├── templates/                            # 引用模板（按层独立维护）
-│   ├── dimensions-index.md               # 评分标准路由索引
-│   ├── dimensions-layer1.md              # 第一层评分标准
-│   ├── dimensions-layer2.md              # 第二层评分标准
-│   ├── prompts-index.md                  # Prompt 模板路由索引
-│   ├── prompts-layer1.md                 # 第一层 Prompt 模板
-│   ├── prompts-layer2.md                 # 第二层 Prompt 模板
-│   ├── report-index.md                   # 报告格式路由索引 + 多 Skill 对比
-│   ├── report-layer1.md                  # 第一层报告格式
-│   ├── report-layer2.md                  # 第二层报告格式
-│   └── report-layer3.md                  # 第三层报告格式
+│   ├── dimensions-*.md                   # 评分标准
+│   ├── prompts-*.md                      # Prompt 模板
+│   └── report-*.md                       # 报告格式
 ├── scripts/
-│   └── qianfan_chat.py                   # 千帆 API 调用脚本
+│   └── deepseek_chat.py                  # DeepSeek API 调用脚本
 ├── ci/                                   # CI 集成配置
 │   ├── github-actions.yml                # GitHub Actions 工作流
 │   └── gitlab-ci.yml                     # GitLab CI 流水线
-├── config.json                           # 千帆 Token 配置（gitignore）
+├── config.json                           # DeepSeek API Key 配置（gitignore）
 ├── .gitignore
 ├── CHANGELOG.md
 ├── LICENSE
@@ -259,65 +256,7 @@ skill-evaluator/
 └── README_EN.md
 ```
 
-## 评估结果持久化
-
-评估完成后，报告自动保存为 Markdown 文件：
-
-```
-{待评估 Skill 根目录}/
-├── eval-results/
-│   ├── eval-state.json                       # 增量评估状态文件
-│   ├── layer1_2026-06-07_143025.md
-│   ├── layer2_2026-06-07_150030.md
-│   └── layer3_2026-06-07_160045.md
-├── SKILL.md
-└── ...
-```
-
-- 报告存放在待评估 Skill 根目录下的 `eval-results/`，可在预检时自定义路径
-- 文件名格式：`layer{N}_{YYYY-MM-DD_HHmmss}.md`
-- 存在历史报告时，自动输出分数变化趋势
-- 建议在待评估 Skill 的 `.gitignore` 中添加 `eval-results/`
-
-## CI 集成
-
-项目提供 GitHub Actions 和 GitLab CI 配置，实现 Skill 变更时自动评估。
-
-### GitHub Actions
-
-将 `ci/github-actions.yml` 复制到你的仓库 `.github/workflows/` 目录下：
-
-```bash
-cp ci/github-actions.yml .github/workflows/skill-evaluation.yml
-```
-
-需要配置的 Secret：
-- `ANTHROPIC_API_KEY`：Claude API 密钥（使用 Claude CLI 评估时）
-- `QIANFAN_BEARER_TOKEN`：千帆 API Token（使用策略 B 时，可选）
-
-触发条件：
-- push 或 PR 修改了 `SKILL.md` 或 `references/`、`templates/` 目录或任何 `.md` 文件
-- 支持手动触发（workflow_dispatch），可指定 Skill 路径
-
-### GitLab CI
-
-将 `ci/gitlab-ci.yml` 的内容合并到你的 `.gitlab-ci.yml` 中：
-
-```bash
-# 追加到现有 CI 配置
-cat ci/gitlab-ci.yml >> .gitlab-ci.yml
-```
-
-需要在 GitLab CI/CD Variables 中配置：
-- `QIANFAN_BEARER_TOKEN`：千帆 API Token（可选）
-
-触发条件：
-- 修改了 `SKILL.md` 或 `references/`、`templates/` 目录或任何 `.md` 文件时自动触发
-- 评估结果作为 Artifact 保留 90 天
-
-## 独立性声明
-
-本 Skill 是独立第三方评估工具，不属于任何被评估的 Skill 体系。评估结果保存到被评估体系外部，避免"自己审自己"。
+评估完成后，报告自动保存到待评估 Skill 根目录下的 `eval-results/`，文件名格式为 `layer{N}_{YYYY-MM-DD_HHmmss}.md`。存在历史报告时自动输出分数变化趋势。
 
 ## 输出示例
 
@@ -350,43 +289,10 @@ cat ci/gitlab-ci.yml >> .gitlab-ci.yml
 | D7. 写作质量 | 8/10 | 结构清晰，逻辑流畅 |
 | D8. 范围与聚焦 | 8/10 | 聚焦单一问题域 |
 
-#### 子文档评分总览
-
-| 文件 | 评估深度 | 综合得分 | 等级 | 主要问题 |
-|------|---------|---------|------|---------|
-| 01-base-entity.md | 完整 | 8.5/10 | A | D6 资源利用不足 |
-| 99-workflows/create.md | 轻量 | 8.0/10 | A | — |
-
 #### 问题与建议
 
-1. **SKILL.md - D2. 执行引导清晰度**：缺少异常处理指引 → 添加"当用户输入不完整时"的分支逻辑
-2. **SKILL.md - D5. 输入输出清晰度**：缺少输入示例 → 在场景描述中添加 2-3 个具体输入示例
-```
-
-### 第二层：分类一致性评估
-
-```
-## 分类一致性评估报告（第二层）
-
-### java-convention
-
-**加权总分：8.5 / 10（等级 A）**
-
-| 维度 | 评分 | 权重 | 说明 |
-|------|------|------|------|
-| D1 职责边界 | 9/10 | 15% | 文件职责清晰，无重叠 |
-| D2 术语一致性 | 8/10 | 10% | 核心术语统一，少量缩写不一致 |
-| D3 交叉引用 | 9/10 | 10% | 引用正确可达 |
-| D4 知识覆盖度 | 8/10 | 15% | 核心场景覆盖，缺少缓存策略 |
-| D5 冗余检测 | 7/10 | 10% | 01 和 09 有重复定义 |
-| D6 层级结构 | 9/10 | 10% | 编号连续，命名统一 |
-| D7 元数据一致性 | 9/10 | 15% | frontmatter 与路由表一致 |
-| D8 工作流闭环 | 8/10 | 15% | 主流程覆盖，分支缺失 |
-
-### 问题与建议
-
-1. **D5 冗余检测**：01-base-entity.md 和 09-exception-handling.md 重复定义了异常处理 → 集中到 09，01 改为引用
-2. **D4 知识覆盖度**：缺少缓存策略最佳实践 → 新增 13-caching.md
+1. **D2. 执行引导清晰度**：缺少异常处理指引 → 添加"当用户输入不完整时"的分支逻辑
+2. **D5. 输入输出清晰度**：缺少输入示例 → 在场景描述中添加 2-3 个具体输入示例
 ```
 
 ### 多模型交叉验证
@@ -396,31 +302,13 @@ cat ci/gitlab-ci.yml >> .gitlab-ci.yml
 
 ### my-awesome-skill
 
-> 主模型：当前 Agent | 评估模型：Sonnet, GLM-5, MiniMax
-
-#### 独立评估结果
-
-##### Sonnet 评估
-
-| 维度 | 分数 | 说明 |
-|------|------|------|
-| D1. 元数据质量 | 8/10 | ... |
-| ... | ... | ... |
-| **综合得分** | **7.9/10 (等级 A)** | |
-
-##### GLM-5 评估
-
-（略）
-
-##### MiniMax 评估
-
-（略）
+> 主模型：当前 Agent | 评估模型：deepseek-chat, deepseek-reasoner, sonnet
 
 #### 交叉验证要点
 
 | 维度 | 分歧 | 详情 |
 |------|------|------|
-| D3. 领域知识密度 | Sonnet(9) vs MiniMax(6) | Sonnet 认为内嵌了丰富专家知识；MiniMax 认为知识深度不足 |
+| D3. 领域知识密度 | sonnet(9) vs deepseek-reasoner(6) | sonnet 认为内嵌了丰富专家知识；deepseek-reasoner 认为知识深度不足 |
 
 > 共 1 个维度存在显著分歧（差异 >= 2 分），7 个维度全部模型一致。
 
@@ -431,13 +319,39 @@ cat ci/gitlab-ci.yml >> .gitlab-ci.yml
 | 维度 | 最终分数 | 共识度 | 仲裁说明 |
 |------|----------|--------|----------|
 | D1. 元数据质量 | 8/10 | 一致 | 三模型评分一致 |
-| D3. 领域知识密度 | 8/10 | 仲裁 | Sonnet 和 GLM-5 给 8-9 分，MiniMax 给 6 分；采纳多数意见 |
-| ... | ... | ... | ... |
-
-#### 问题与建议
-
-1. **D2. 执行引导清晰度**（共识度：一致）：缺少异常处理 -> 添加分支逻辑
+| D3. 领域知识密度 | 8/10 | 仲裁 | sonnet 和 deepseek-chat 给 8-9 分，deepseek-reasoner 给 6 分；采纳多数意见 |
 ```
+
+## CI 集成
+
+项目提供 GitHub Actions 和 GitLab CI 配置，实现 Skill 变更时自动评估。
+
+### GitHub Actions
+
+```bash
+cp ci/github-actions.yml .github/workflows/skill-evaluation.yml
+```
+
+需要配置的 Secret：
+- `ANTHROPIC_API_KEY`：Claude API 密钥（使用 Claude CLI 评估时）
+- `DEEPSEEK_API_KEY`：DeepSeek API Key（使用策略 B 时，可选）
+
+触发条件：push 或 PR 修改了 `SKILL.md` 或 `references/`、`templates/` 目录或任何 `.md` 文件，支持手动触发。
+
+### GitLab CI
+
+```bash
+cat ci/gitlab-ci.yml >> .gitlab-ci.yml
+```
+
+需要在 GitLab CI/CD Variables 中配置：
+- `DEEPSEEK_API_KEY`：DeepSeek API Key（可选）
+
+评估结果作为 Artifact 保留 90 天。
+
+## 独立性声明
+
+本 Skill 是独立第三方评估工具，不属于任何被评估的 Skill 体系。评估结果保存到被评估体系外部，避免"自己审自己"。
 
 ## 贡献
 
@@ -451,4 +365,4 @@ cat ci/gitlab-ci.yml >> .gitlab-ci.yml
 
 ## License
 
-MIT
+[MIT](LICENSE)

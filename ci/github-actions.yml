@@ -37,7 +37,7 @@ jobs:
 
       - name: Run Skill Evaluation (Layer 1 — Full Scan)
         env:
-          QIANFAN_BEARER_TOKEN: ${{ secrets.QIANFAN_BEARER_TOKEN }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         run: |
           SKILL_PATH="${{ github.event.inputs.skill_path || '.' }}"
 

@@ -64,4 +64,4 @@ skill-evaluation:
       - eval-results/
     expire_in: 90 days
   variables:
-    QIANFAN_BEARER_TOKEN: $QIANFAN_BEARER_TOKEN
+    DEEPSEEK_API_KEY: $DEEPSEEK_API_KEY

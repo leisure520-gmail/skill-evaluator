@@ -13,11 +13,11 @@ All notable changes to this project will be documented in this file.
 - **分类自动发现**：递归扫描 SKILL.md 识别分类，无需硬编码目录结构
 - **评估深度分级**：入口文件/有 frontmatter 子文档完整评估（D1-D8），无 frontmatter 子文档轻量评估（D3+D7）
 - **增量评估机制**：基于内容指纹（SHA-256）检测文件变更，跳过未变更文件
-- **多模型交叉验证**：策略 A（subagent 并行多模型）→ 策略 B（千帆 API 多模型）→ 策略 C（串行多视角），自动降级
+- **多模型交叉验证**：策略 A（subagent 并行多模型）→ 策略 B（DeepSeek API 多模型）→ 策略 C（串行多视角），自动降级
 - **多 Skill 对比**：并列评分表、优劣势分析、经验总结、排名
 - **S/A/B/C/D 等级映射**：S 级（≥9.0）为唯一达标等级
 - `references/` 目录：layer1-quality.md、layer2-consistency.md、layer3-architecture.md、eval-state.md、multi-model.md
 - `templates/` 目录：按层独立维护的评分标准、Prompt 模板、报告格式
-- `scripts/qianfan_chat.py`：千帆 API 调用脚本
+- `scripts/deepseek_chat.py`：DeepSeek API 调用脚本
 - `ci/` 目录：GitHub Actions 和 GitLab CI 配置
 - 项目发布文件：README.md、README_EN.md、.gitignore、LICENSE
