@@ -4,9 +4,9 @@
 
 | 评估层 | 报告格式文件 | 说明 |
 |--------|-------------|------|
-| 第一层：文件质量评估 | `report-layer1.md` | 单模型 / 多模型 / 多视角三种报告格式 |
-| 第二层：分类一致性评估 | `report-layer2.md` | 单模型 / 多模型 / 多视角三种报告格式 |
-| 第三层：体系架构评估 | `report-layer3.md` | 仅单模型报告格式 |
+| 第一层：文件质量评估 | `assets/templates/report-layer1.md` | 单模型 / 多模型 / 多视角三种报告格式 |
+| 第二层：分类一致性评估 | `assets/templates/report-layer2.md` | 单模型 / 多模型 / 多视角三种报告格式 |
+| 第三层：体系架构评估 | `assets/templates/report-layer3.md` | 仅单模型报告格式 |
 
 ---
 

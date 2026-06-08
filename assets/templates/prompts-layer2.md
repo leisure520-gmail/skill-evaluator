@@ -10,7 +10,7 @@
 
 | 占位符 | 说明 | 示例 |
 |--------|------|------|
-| `{{DIMENSIONS}}` | 评分标准完整内容 | 从 `templates/dimensions-layer2.md` 粘贴 |
+| `{{DIMENSIONS}}` | 评分标准完整内容 | 从 `assets/templates/dimensions-layer2.md` 粘贴 |
 | `{{CATEGORY_NAME}}` | 分类名称 | 入口文件所在目录名 |
 | `{{SUB_DOC_COUNT}}` | 子文档数量 | 整数 |
 | `{{SKILL_CONTENT}}` | 入口文件完整内容 | SKILL.md 的全部文本 |

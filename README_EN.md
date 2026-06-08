@@ -235,20 +235,23 @@ Strategies are automatically selected based on execution conditions (A → B →
 skill-evaluator/
 ├── SKILL.md                              # Main entry (routing + constraints)
 ├── references/                           # Evaluation docs (loaded on demand)
+│   ├── config.md                         # Shared constants
 │   ├── layer1-quality.md                 # Layer 1: File quality evaluation
 │   ├── layer2-consistency.md             # Layer 2: Category consistency evaluation
 │   ├── layer3-architecture.md            # Layer 3: System architecture evaluation
 │   ├── eval-state.md                     # Incremental evaluation state management
-│   └── multi-model.md                    # Multi-model cross-validation strategy
-├── templates/                            # Reference templates (maintained per layer)
-│   ├── dimensions-*.md                   # Scoring standards
-│   ├── prompts-*.md                      # Prompt templates
-│   └── report-*.md                       # Report formats
+│   ├── multi-model.md                    # Multi-model cross-validation strategy
+│   └── auto-fix.md                       # Auto-fix mechanism
+├── assets/                                # Static resources
+│   ├── templates/                         # Reference templates (maintained per layer)
+│   │   ├── dimensions-*.md                # Scoring standards
+│   │   ├── prompts-*.md                   # Prompt templates
+│   │   └── report-*.md                    # Report formats
+│   └── ci/                                # CI integration configs
+│       ├── github-actions.yml             # GitHub Actions workflow
+│       └── gitlab-ci.yml                  # GitLab CI pipeline
 ├── scripts/
-│   └── deepseek_chat.py                  # DeepSeek API call script
-├── ci/                                   # CI integration configs
-│   ├── github-actions.yml                # GitHub Actions workflow
-│   └── gitlab-ci.yml                     # GitLab CI pipeline
+│   └── deepseek_chat.py                   # DeepSeek API call script
 ├── config.json                           # DeepSeek API Key config (gitignored)
 ├── .gitignore
 ├── CHANGELOG.md
@@ -330,19 +333,19 @@ The project provides GitHub Actions and GitLab CI configurations for automatic e
 ### GitHub Actions
 
 ```bash
-cp ci/github-actions.yml .github/workflows/skill-evaluation.yml
+cp assets/ci/github-actions.yml .github/workflows/skill-evaluation.yml
 ```
 
 Required Secrets:
 - `ANTHROPIC_API_KEY`: Claude API key (when using Claude CLI for evaluation)
 - `DEEPSEEK_API_KEY`: DeepSeek API Key (optional, for Strategy B)
 
-Triggers: Push or PR that modifies `SKILL.md` or `references/`, `templates/` directories or any `.md` file. Supports manual trigger.
+Triggers: Push or PR that modifies `SKILL.md` or `references/`, `assets/templates/` directories or any `.md` file. Supports manual trigger.
 
 ### GitLab CI
 
 ```bash
-cat ci/gitlab-ci.yml >> .gitlab-ci.yml
+cat assets/ci/gitlab-ci.yml >> .gitlab-ci.yml
 ```
 
 Required GitLab CI/CD Variables:

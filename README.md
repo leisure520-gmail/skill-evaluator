@@ -234,20 +234,23 @@ export DEEPSEEK_API_KEY="sk-your-api-key-here"
 skill-evaluator/
 ├── SKILL.md                              # 主入口（路由 + 约束）
 ├── references/                           # 评估文档（按需加载）
+│   ├── config.md                         # 共享常量定义
 │   ├── layer1-quality.md                 # 第一层：文件质量评估
 │   ├── layer2-consistency.md             # 第二层：分类一致性评估
 │   ├── layer3-architecture.md            # 第三层：体系架构评估
 │   ├── eval-state.md                     # 增量评估状态管理
-│   └── multi-model.md                    # 多模型交叉验证策略
-├── templates/                            # 引用模板（按层独立维护）
-│   ├── dimensions-*.md                   # 评分标准
-│   ├── prompts-*.md                      # Prompt 模板
-│   └── report-*.md                       # 报告格式
+│   ├── multi-model.md                    # 多模型交叉验证策略
+│   └── auto-fix.md                       # 自动修复机制
+├── assets/                                # 静态资源
+│   ├── templates/                         # 引用模板（按层独立维护）
+│   │   ├── dimensions-*.md                # 评分标准
+│   │   ├── prompts-*.md                   # Prompt 模板
+│   │   └── report-*.md                    # 报告格式
+│   └── ci/                                # CI 集成配置
+│       ├── github-actions.yml             # GitHub Actions 工作流
+│       └── gitlab-ci.yml                  # GitLab CI 流水线
 ├── scripts/
-│   └── deepseek_chat.py                  # DeepSeek API 调用脚本
-├── ci/                                   # CI 集成配置
-│   ├── github-actions.yml                # GitHub Actions 工作流
-│   └── gitlab-ci.yml                     # GitLab CI 流水线
+│   └── deepseek_chat.py                   # DeepSeek API 调用脚本
 ├── config.json                           # DeepSeek API Key 配置（gitignore）
 ├── .gitignore
 ├── CHANGELOG.md
@@ -329,19 +332,19 @@ skill-evaluator/
 ### GitHub Actions
 
 ```bash
-cp ci/github-actions.yml .github/workflows/skill-evaluation.yml
+cp assets/ci/github-actions.yml .github/workflows/skill-evaluation.yml
 ```
 
 需要配置的 Secret：
 - `ANTHROPIC_API_KEY`：Claude API 密钥（使用 Claude CLI 评估时）
 - `DEEPSEEK_API_KEY`：DeepSeek API Key（使用策略 B 时，可选）
 
-触发条件：push 或 PR 修改了 `SKILL.md` 或 `references/`、`templates/` 目录或任何 `.md` 文件，支持手动触发。
+触发条件：push 或 PR 修改了 `SKILL.md` 或 `references/`、`assets/templates/` 目录或任何 `.md` 文件，支持手动触发。
 
 ### GitLab CI
 
 ```bash
-cat ci/gitlab-ci.yml >> .gitlab-ci.yml
+cat assets/ci/gitlab-ci.yml >> .gitlab-ci.yml
 ```
 
 需要在 GitLab CI/CD Variables 中配置：

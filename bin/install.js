@@ -21,7 +21,7 @@ const INSTALL_ENTRIES = [
   "SKILL.md",
   "references",
   "scripts",
-  "templates",
+  "assets",
 ];
 
 // 受保护文件（升级时不覆盖）

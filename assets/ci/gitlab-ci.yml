@@ -11,7 +11,7 @@ skill-evaluation:
     changes:
       - "**/SKILL.md"
       - "**/references/**"
-      - "**/templates/**"
+      - "**/assets/templates/**"
       - "**/*.md"
   except:
     changes:

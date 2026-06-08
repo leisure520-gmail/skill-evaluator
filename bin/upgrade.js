@@ -63,7 +63,7 @@ function main() {
         console.log(`  [${target.name}] -> ${target.dir}\n`);
 
         const allChanges = [];
-        const installEntries = ["SKILL.md", "references", "scripts", "templates"];
+        const installEntries = ["SKILL.md", "references", "scripts", "assets"];
 
         for (const entry of installEntries) {
             const srcPath = path.join(DISTRO_ROOT, entry);

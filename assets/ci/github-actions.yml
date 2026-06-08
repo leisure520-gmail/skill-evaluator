@@ -5,13 +5,13 @@ on:
     paths:
       - '**/SKILL.md'
       - '**/references/**'
-      - '**/templates/**'
+      - '**/assets/templates/**'
       - '**/*.md'
   pull_request:
     paths:
       - '**/SKILL.md'
       - '**/references/**'
-      - '**/templates/**'
+      - '**/assets/templates/**'
       - '**/*.md'
   workflow_dispatch:
     inputs:

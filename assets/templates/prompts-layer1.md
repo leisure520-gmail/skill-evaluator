@@ -12,7 +12,7 @@
 
 | 占位符 | 说明 | 示例 |
 |--------|------|------|
-| `{{DIMENSIONS}}` | 评分标准完整内容 | 从 `templates/dimensions-layer1.md` 粘贴 |
+| `{{DIMENSIONS}}` | 评分标准完整内容 | 从 `assets/templates/dimensions-layer1.md` 粘贴 |
 | `{{SKILL_CONTENT}}` | 入口文件完整内容 | SKILL.md 的全部文本 |
 | `{{SUB_DOCS}}` | 子文档列表（含文件名和评估深度标注） | 按子文档 order 排序 |
 | `{{FILE_CONTENT}}` | 单个文件内容 | 子文档的完整文本 |

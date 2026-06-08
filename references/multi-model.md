@@ -114,13 +114,13 @@ python3 -c "import json,os; p='<SKILL_DIR>/config.json'; c=json.load(open(p)) if
 对模型列表中每个模型，使用 Agent 工具并行 spawn subagent：
 - `model` 参数设为对应模型
 - 所有 subagent 同一轮派发
-- Prompt：读取 `templates/prompts-layer1.md`「独立评估 Prompt」，填充 Skill 内容 + `templates/dimensions-layer1.md` 评分标准
+- Prompt：读取 `assets/templates/prompts-layer1.md`「独立评估 Prompt」，填充 Skill 内容 + `assets/templates/dimensions-layer1.md` 评分标准
 
 ### 步骤 2：两两交叉互审
 
 每个模型审查其他模型的评估结果：
 - 使用 Agent 工具并行 spawn cross-review subagent
-- Prompt：读取 `templates/prompts-layer1.md`「交叉互审 Prompt」
+- Prompt：读取 `assets/templates/prompts-layer1.md`「交叉互审 Prompt」
 
 ### 步骤 3：仲裁综合
 
@@ -183,7 +183,7 @@ python3 scripts/deepseek_chat.py \
 
 ### 步骤 1：串行多视角独立评估
 
-依次以 3 个视角评估。读取 `templates/prompts-layer1.md`「视角评估模板」：
+依次以 3 个视角评估。读取 `assets/templates/prompts-layer1.md`「视角评估模板」：
 
 - **严格派**：挑剔眼光，关注缺失项，6 分起步
 - **务实派**：关注实际可用性，7 分起步
@@ -193,7 +193,7 @@ python3 scripts/deepseek_chat.py \
 
 ### 步骤 2：自我交叉审查
 
-3 视角评估完成后，按 `templates/prompts-layer1.md`「自我交叉审查模板」对比，找出分差 >= 2 的维度。
+3 视角评估完成后，按 `assets/templates/prompts-layer1.md`「自我交叉审查模板」对比，找出分差 >= 2 的维度。
 
 ### 步骤 3：综合仲裁
 
@@ -203,7 +203,7 @@ python3 scripts/deepseek_chat.py \
 
 ## 报告格式
 
-多模型/多视角报告格式详见 `templates/report-layer1.md`（第一层）和 `templates/report-layer2.md`（第二层）。
+多模型/多视角报告格式详见 `assets/templates/report-layer1.md`（第一层）和 `assets/templates/report-layer2.md`（第二层）。
 
 核心区别：报告需包含各模型/视角的独立评分、交叉验证要点、最终仲裁结论（含共识度标记）。
 
