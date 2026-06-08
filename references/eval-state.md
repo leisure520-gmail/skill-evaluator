@@ -36,7 +36,7 @@
     "relative/path/to/SKILL.md": {
       "fingerprint": "sha256:abc123...",
       "role": "entry",
-      "category": "java-convention",
+      "category": "writing-java-code",
       "last_eval_time": "2026-06-07T14:30:25Z",
       "eval_depth": "full",
       "scores": {
@@ -50,7 +50,7 @@
     "relative/path/to/01-base-entity.md": {
       "fingerprint": "sha256:def456...",
       "role": "sub-doc",
-      "category": "java-convention",
+      "category": "writing-java-code",
       "last_eval_time": "2026-06-07T14:30:25Z",
       "eval_depth": "full",
       "scores": {
@@ -151,17 +151,17 @@ sha256sum "{file_path}" | cut -d' ' -f1
 跳过评估：42 个文件（沿用上次结果）
 
 需评估文件清单：
-  [新增] java-convention/14-new-topic.md
-  [新增] vue3-convention/09-ssr.md
+  [新增] writing-java-code/14-new-topic.md
+  [新增] building-vue3-apps/09-ssr.md
   [新增] testing-convention/08-integration.md
-  [变更] java-convention/SKILL.md
-  [变更] java-convention/01-base-entity.md
-  [变更] vue3-convention/SKILL.md
+  [变更] writing-java-code/SKILL.md
+  [变更] writing-java-code/01-base-entity.md
+  [变更] building-vue3-apps/SKILL.md
   [变更] quality-assurance/00-compliance-gate.md
   [变更] CONVENTION.md
 
 已删除文件：
-  [删除] java-convention/12-old-topic.md
+  [删除] writing-java-code/12-old-topic.md
 ═══════════════════════════════════
 ```
 

@@ -150,44 +150,44 @@ Evaluate the architecture of my-skill-system
 
 | Dimension | Weight | Description |
 |---|---|---|
-| D1. Metadata Quality | 15% | Quality of `name` and `description` in YAML frontmatter |
-| D2. Execution Guidance Clarity | 15% | Whether Agent knows how to execute after loading |
-| D3. Domain Knowledge Density | 15% | Whether it embeds expertise beyond general Agent knowledge |
-| D4. Workflow Completeness | 15% | End-to-end workflow with branches and exception handling |
-| D5. I/O Clarity | 10% | Whether users know what to provide and expect |
-| D6. Resource Utilization | 10% | Utilization of scripts, references, assets |
-| D7. Writing Quality | 10% | Structure clarity, readability, and precision |
-| D8. Scope & Focus | 10% | Focused on a single problem domain |
+| D1(Metadata) | 15% | Quality of `name` and `description` in YAML frontmatter |
+| D2(ExecGuide) | 15% | Whether Agent knows how to execute after loading |
+| D3(DomainKnow) | 15% | Whether it embeds expertise beyond general Agent knowledge |
+| D4(Workflow) | 15% | End-to-end workflow with branches and exception handling |
+| D5(IO Clarity) | 10% | Whether users know what to provide and expect |
+| D6(Resources) | 10% | Utilization of scripts, references, assets |
+| D7(Writing) | 10% | Structure clarity, readability, and precision |
+| D8(Scope) | 10% | Focused on a single problem domain |
 
 #### Layer 2: Category Consistency Evaluation (8 dimensions)
 
 | Dimension | Weight | Description |
 |---|---|---|
-| D1. Responsibility Boundaries | 15% | No overlap or gaps in file responsibilities within category |
-| D2. Terminology Consistency | 10% | Same concept uses unified terminology across all files |
-| D3. Cross-References | 10% | Inter-file references are correct and reachable |
-| D4. Knowledge Coverage | 15% | Core scenarios of the category domain are fully covered |
-| D5. Redundancy Detection | 10% | No large-scale duplication across files |
-| D6. Hierarchical Structure | 10% | Consistent numbering/grouping/naming logic |
-| D7. Metadata Consistency | 15% | Sub-doc frontmatter matches routing table, no orphaned/ghost |
-| D8. Workflow Closure | 15% | Workflows declared in entry file are fully covered by sub-docs |
+| D1(Boundaries) | 15% | No overlap or gaps in file responsibilities within category |
+| D2(Terminology) | 10% | Same concept uses unified terminology across all files |
+| D3(CrossRef) | 10% | Inter-file references are correct and reachable |
+| D4(Coverage) | 15% | Core scenarios of the category domain are fully covered |
+| D5(Redundancy) | 10% | No large-scale duplication across files |
+| D6(Hierarchy) | 10% | Consistent numbering/grouping/naming logic |
+| D7(MetaMatch) | 15% | Sub-doc frontmatter matches routing table, no orphaned/ghost |
+| D8(Closure) | 15% | Workflows declared in entry file are fully covered by sub-docs |
 
 #### Layer 3: System Architecture Evaluation (12 dimensions)
 
 | Dimension | Weight | Description |
 |---|---|---|
-| D1. Modular Encapsulation | 10% | Skills are independent, testable, composable |
-| D2. Progressive Disclosure | 8% | On-demand loading, three-stage (discover->activate->execute) |
-| D3. TDD Workflow | 12% | Test-first, RED-GREEN-REFACTOR cycle |
-| D4. Three-File Pattern | 7% | plan.md + context.md + tasks.md structured management |
-| D5. Skill Discovery & Composition | 10% | Auto-identify task types and recommend/combine skills |
-| D6. Knowledge Reusability | 8% | Cross-project reuse, versioning, and quality feedback |
-| D7. Skill Design Principles | 8% | Single responsibility, high cohesion, low coupling |
-| D8. Progressive Adoption | 5% | 4-stage adoption path with "minimum viable set" |
-| D9. Convention Structure | 5% | Quantifiable and verifiable conventions |
-| D10. On-Demand Loading | 7% | Context budget management |
-| D11. Scenario Adaptation | 10% | Lightweight mode, compliance intensity matches task complexity |
-| D12. Continuous Maintenance | 10% | Auto-detection, CHANGELOG, approval workflow |
+| D1(Modular) | 10% | Skills are independent, testable, composable |
+| D2(ProgDisc) | 8% | On-demand loading, three-stage (discover->activate->execute) |
+| D3(TDD) | 12% | Test-first, RED-GREEN-REFACTOR cycle |
+| D4(3-File) | 7% | plan.md + context.md + tasks.md structured management |
+| D5(Discovery) | 10% | Auto-identify task types and recommend/combine skills |
+| D6(Reuse) | 8% | Cross-project reuse, versioning, and quality feedback |
+| D7(Design) | 8% | Single responsibility, high cohesion, low coupling |
+| D8(ProgAdopt) | 5% | 4-stage adoption path with "minimum viable set" |
+| D9(Structure) | 5% | Quantifiable and verifiable conventions |
+| D10(OnDemand) | 7% | Context budget management |
+| D11(Adapt) | 10% | Lightweight mode, compliance intensity matches task complexity |
+| D12(Maintain) | 10% | Auto-detection, CHANGELOG, approval workflow |
 
 ### Grade Standards
 
@@ -271,7 +271,7 @@ After evaluation, reports are automatically saved to the target Skill's root dir
 - Evaluation mode: Incremental
 - Evaluated files: 8 | Skipped files (unchanged): 42
 
-### java-convention — Composite Score
+### writing-java-code — Composite Score
 
 **Category Average: 8.3 / 10 (Grade A) | Minimum: 7.2 / 10 (Grade B)**
 
@@ -281,19 +281,19 @@ After evaluation, reports are automatically saved to the target Skill's root dir
 
 | Dimension | Score | Notes |
 |-----------|-------|-------|
-| D1. Metadata Quality | 8/10 | Clear description with trigger conditions |
-| D2. Execution Guidance Clarity | 7/10 | Guidance for most scenarios, missing exception handling |
-| D3. Domain Knowledge Density | 9/10 | Rich expert knowledge and best practices |
-| D4. Workflow Completeness | 8/10 | Complete multi-step workflow |
-| D5. I/O Clarity | 7/10 | Has output format, missing input examples |
-| D6. Resource Utilization | 7/10 | N/A -- No supplementary resources needed |
-| D7. Writing Quality | 8/10 | Clear structure, smooth logic |
-| D8. Scope & Focus | 8/10 | Focused on a single problem domain |
+| D1(Metadata) | 8/10 | Clear description with trigger conditions |
+| D2(ExecGuide) | 7/10 | Guidance for most scenarios, missing exception handling |
+| D3(DomainKnow) | 9/10 | Rich expert knowledge and best practices |
+| D4(Workflow) | 8/10 | Complete multi-step workflow |
+| D5(IO Clarity) | 7/10 | Has output format, missing input examples |
+| D6(Resources) | 7/10 | N/A -- No supplementary resources needed |
+| D7(Writing) | 8/10 | Clear structure, smooth logic |
+| D8(Scope) | 8/10 | Focused on a single problem domain |
 
 #### Issues & Suggestions
 
-1. **D2. Execution Guidance Clarity**: Missing exception handling guidance -> Add branching logic for "when user input is incomplete"
-2. **D5. I/O Clarity**: Missing input examples -> Add 2-3 concrete input examples in usage scenarios
+1. **D2(ExecGuide)**: Missing exception handling guidance -> Add branching logic for "when user input is incomplete"
+2. **D5(IO Clarity)**: Missing input examples -> Add 2-3 concrete input examples in usage scenarios
 ```
 
 ### Multi-Model Cross-Validation
@@ -309,7 +309,7 @@ After evaluation, reports are automatically saved to the target Skill's root dir
 
 | Dimension | Discrepancy | Details |
 |-----------|-------------|---------|
-| D3. Domain Knowledge Density | sonnet(9) vs deepseek-reasoner(6) | sonnet found rich expert knowledge; deepseek-reasoner considered depth insufficient |
+| D3(DomainKnow) | sonnet(9) vs deepseek-reasoner(6) | sonnet found rich expert knowledge; deepseek-reasoner considered depth insufficient |
 
 > 1 dimension with significant discrepancy (diff >= 2), 7 dimensions consistent across all models.
 
@@ -319,8 +319,8 @@ After evaluation, reports are automatically saved to the target Skill's root dir
 
 | Dimension | Final Score | Consensus | Arbitration Notes |
 |-----------|-------------|-----------|-------------------|
-| D1. Metadata Quality | 8/10 | Unanimous | All models agree |
-| D3. Domain Knowledge Density | 8/10 | Arbitrated | sonnet and deepseek-chat gave 8-9, deepseek-reasoner gave 6; adopted majority |
+| D1(Metadata) | 8/10 | Unanimous | All models agree |
+| D3(DomainKnow) | 8/10 | Arbitrated | sonnet and deepseek-chat gave 8-9, deepseek-reasoner gave 6; adopted majority |
 ```
 
 ## CI Integration
