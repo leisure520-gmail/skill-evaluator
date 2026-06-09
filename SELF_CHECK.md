@@ -20,7 +20,7 @@ parent: skill-evaluator
 |------|-----|
 | 自检版本 | 1.0.1 |
 | 自检日期 | 2026-06-09 |
-| 自检对象 | skill-evaluator SKILL.md 及 references/ 目录 |
+| 自检对象 | skill-evaluator SKILL.md、references/ 子文档及 assets/ 资源文件 |
 | 自检执行者 | 文件作者（人工自检） |
 | 独立验证状态 | 待执行（建议在下次主版本发布前完成） |
 
@@ -36,9 +36,9 @@ parent: skill-evaluator
 | 1.4 description 包含触发关键词 | ✅ | `TRIGGER when 评审/审计/打分/对比 Skill；DO NOT TRIGGER when 修改 Skill 内容本身` |
 | 1.5 status 与实际内容一致 | ✅ | `status: published`，内容完整可用 |
 
-**改进**：v1.0.1 已为所有 references/ 子文档（7 个）和 assets/templates/ 模板文件（10 个）补充了 frontmatter（含 name/description/status/version/parent）。
+**改进**：v1.0.1 已为所有 references/ 子文档（7 个）补充了 frontmatter（含 name/description/status/version/parent）。assets/templates/ 下的模板文件（10 个）属于资源文件，设计上不应有 frontmatter，按内容评估（D3+D7）处理。
 
-**不足**：SELF_CHECK.md 本身无 frontmatter（✅ v1.0.1 已补充）；子文档版本号曾与主版本不同步（✅ v1.0.1 已修复）。
+**不足**：SELF_CHECK.md 本身无 frontmatter（✅ v1.0.1 已补充）；子文档版本号曾与主版本不同步（✅ v1.0.1 已修复）；v1.0.1 早期曾错误地为 assets/templates/ 模板文件添加 frontmatter（✅ v1.0.1 已回退，明确模板文件不要求 frontmatter）。
 
 ---
 
@@ -151,7 +151,8 @@ parent: skill-evaluator
 | 维度权重（15%/10%）的设计依据未说明 | D3 | ✅ v1.0.1 已补充（dimensions-layer1.md / dimensions-layer2.md） | — |
 | SKILL.md 与 TRAINING.md 三层体系描述有重复 | D7 | ✅ v1.0.1 已修复（TRAINING.md 改为引用） | — |
 | references/ 子文档无 frontmatter | D1 | ✅ v1.0.1 已修复（全部补充） | — |
-| assets/templates/ 模板文件无 frontmatter | D1 | ✅ v1.0.1 已修复（全部补充） | — |
+| assets/templates/ 模板文件无 frontmatter | D1 | ✅ v1.0.1 已回退（模板文件不要求 frontmatter，按内容评估处理） | — |
+| assets/templates/ 模板文件曾错误添加 frontmatter | D1 | ✅ v1.0.1 已回退，明确资源文件角色 | — |
 | SELF_CHECK.md 无 frontmatter | D1 | ✅ v1.0.1 已补充 | — |
 | 子文档版本号与主版本不同步 | D1 | ✅ v1.0.1 已修复（17 个文件统一为 1.0.1） | — |
 | 独立第三方验证（另一 AI 实例对本 Skill 执行评估） | 全部 | 待执行 | v1.1.0 发布前 |

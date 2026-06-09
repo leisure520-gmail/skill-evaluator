@@ -12,7 +12,7 @@ parent: skill-evaluator
 
 从以下 **8 个维度** 对每个文件打分，每个维度 0-10 分。此文件是第一层所有评估模式共用的唯一评分标准。
 
-> **评估深度**：入口文件（SKILL.md）和有 frontmatter 的子文档使用完整评估（D1-D8）；无 frontmatter 的子文档使用轻量评估（D3+D7）。详见 `references/layer1-quality.md` 评估深度分级。
+> **评估深度**：入口文件（SKILL.md）和有 frontmatter 的子文档使用完整评估（D1-D8）；无 frontmatter 的子文档使用轻量评估（D3+D7）；assets/ 下的模板/示例/范本使用内容评估（D3+D7，不因缺少 frontmatter 扣分）。详见 `references/layer1-quality.md` 评估深度分级。
 
 ---
 
