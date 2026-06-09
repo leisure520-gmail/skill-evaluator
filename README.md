@@ -1,6 +1,6 @@
 # skill-evaluator
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) | [English](README_EN.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) | [![Version](https://img.shields.io/badge/Version-1.1.0-blue.svg)](CHANGELOG.md) | [English](README_EN.md)
 
 > AI Agent Skill 质量评估工具 — 三层递进评估 + 多模型交叉验证 + 增量评估
 

@@ -18,7 +18,7 @@ parent: skill-evaluator
 
 | 字段 | 值 |
 |------|-----|
-| 自检版本 | 1.0.1 |
+| 自检版本 | 1.1.0 |
 | 自检日期 | 2026-06-09 |
 | 自检对象 | skill-evaluator SKILL.md、references/ 子文档及 assets/ 资源文件 |
 | 自检执行者 | 文件作者（人工自检） |

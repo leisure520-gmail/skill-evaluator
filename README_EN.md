@@ -1,6 +1,6 @@
 # skill-evaluator
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) | [中文](README.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) | [![Version](https://img.shields.io/badge/Version-1.1.0-blue.svg)](CHANGELOG.md) | [中文](README.md)
 
 > AI Agent Skill quality evaluator — Three-layer progressive evaluation + Multi-model cross-validation + Incremental evaluation
 
