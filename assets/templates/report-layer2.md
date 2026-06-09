@@ -1,10 +1,4 @@
----
-name: skill-evaluator/report-layer2
-description: skill-evaluator 模板 — 第二层分类一致性评估报告格式，含分类汇总表和一致性问题格式
-status: published
-version: 1.1.0
-parent: skill-evaluator
----
+
 
 # 第二层：分类一致性评估报告格式
 

@@ -1,10 +1,4 @@
----
-name: skill-evaluator/report-index
-description: skill-evaluator 模板 — 报告格式路由索引，按层独立维护，修改一层不影响其他层
-status: published
-version: 1.1.0
-parent: skill-evaluator
----
+
 
 # 输出格式模板（路由）
 
