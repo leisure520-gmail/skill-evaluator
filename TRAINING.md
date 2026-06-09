@@ -315,9 +315,6 @@ skill-evaluator/
 │   │   ├── dimensions-*.md    # 评分标准（含权重设计依据）
 │   │   ├── prompts-*.md       # Prompt 模板（含自我审查模板）
 │   │   └── report-*.md        # 报告格式
-│   └── ci/                    # CI 集成配置
-│       ├── github-actions.yml
-│       └── gitlab-ci.yml
 ├── scripts/
 │   └── deepseek_chat.py       # DeepSeek API 调用脚本
 └── bin/                       # 安装/升级脚本
@@ -325,33 +322,11 @@ skill-evaluator/
 
 **加载策略**：SKILL.md 是入口，references/ 按 level（must/ref）按需加载，assets/templates/ 在评估时引用。避免一次性加载所有文件导致上下文爆炸。
 
-> **全部子文档和模板文件均已统一 frontmatter**，包含 name/description/status/version/parent 字段，确保元数据规范性。
+> **全部子文档均已统一 frontmatter**，包含 name/description/status/version/parent 字段，确保元数据规范性。assets/templates/ 下的模板文件属于资源文件，设计上不应有 frontmatter。
 
 ---
 
-## 八、CI 集成
-
-### GitHub Actions
-
-```bash
-cp assets/ci/github-actions.yml .github/workflows/skill-evaluation.yml
-```
-
-配置 Secret：`ANTHROPIC_API_KEY`（必需）、`DEEPSEEK_API_KEY`（可选）
-
-触发条件：修改 `.md` 文件或 `references/`、`assets/templates/` 目录时自动触发。
-
-### GitLab CI
-
-```bash
-cat assets/ci/gitlab-ci.yml >> .gitlab-ci.yml
-```
-
-配置 CI/CD Variables：`DEEPSEEK_API_KEY`（可选）
-
----
-
-## 九、培训练习
+## 八、培训练习
 
 ### 练习 1：评估一个简单 Skill
 

@@ -14,7 +14,6 @@
 - [架构](#架构)
 - [项目结构](#项目结构)
 - [输出示例](#输出示例)
-- [CI 集成](#ci-集成)
 - [贡献](#贡献)
 - [License](#license)
 
@@ -246,9 +245,6 @@ skill-evaluator/
 │   │   ├── dimensions-*.md                # 评分标准
 │   │   ├── prompts-*.md                   # Prompt 模板
 │   │   └── report-*.md                    # 报告格式
-│   └── ci/                                # CI 集成配置
-│       ├── github-actions.yml             # GitHub Actions 工作流
-│       └── gitlab-ci.yml                  # GitLab CI 流水线
 ├── scripts/
 │   └── deepseek_chat.py                   # DeepSeek API 调用脚本
 ├── config.json                           # DeepSeek API Key 配置（gitignore）
@@ -324,33 +320,6 @@ skill-evaluator/
 | D1(元数据) | 8/10 | 一致 | 三模型评分一致 |
 | D3(领域知识) | 8/10 | 仲裁 | sonnet 和 deepseek-chat 给 8-9 分，deepseek-reasoner 给 6 分；采纳多数意见 |
 ```
-
-## CI 集成
-
-项目提供 GitHub Actions 和 GitLab CI 配置，实现 Skill 变更时自动评估。
-
-### GitHub Actions
-
-```bash
-cp assets/ci/github-actions.yml .github/workflows/skill-evaluation.yml
-```
-
-需要配置的 Secret：
-- `ANTHROPIC_API_KEY`：Claude API 密钥（使用 Claude CLI 评估时）
-- `DEEPSEEK_API_KEY`：DeepSeek API Key（使用策略 B 时，可选）
-
-触发条件：push 或 PR 修改了 `SKILL.md` 或 `references/`、`assets/templates/` 目录或任何 `.md` 文件，支持手动触发。
-
-### GitLab CI
-
-```bash
-cat assets/ci/gitlab-ci.yml >> .gitlab-ci.yml
-```
-
-需要在 GitLab CI/CD Variables 中配置：
-- `DEEPSEEK_API_KEY`：DeepSeek API Key（可选）
-
-评估结果作为 Artifact 保留 90 天。
 
 ## 独立性声明
 

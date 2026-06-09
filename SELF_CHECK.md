@@ -94,7 +94,7 @@ parent: skill-evaluator
 
 | 检查项 | 状态 | 证据 |
 |--------|------|------|
-| 6.1 引用了外部脚本/工具 | ✅ | `scripts/deepseek_chat.py`，CI 配置（github-actions.yml / gitlab-ci.yml） |
+| 6.1 引用了外部脚本/工具 | ✅ | `scripts/deepseek_chat.py` |
 | 6.2 引用了参考文档 | ✅ | references/ 7 个子文档，assets/templates/ 10 个模板文件 |
 | 6.3 资源路径正确可达 | ✅ | 所有引用路径均在项目结构中存在 |
 | 6.4 资源与 Skill 内容互补 | ✅ | SKILL.md 精简路由，详情在 references/，Prompt 在 templates/ |

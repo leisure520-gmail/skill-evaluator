@@ -14,7 +14,6 @@ Compatible with all AI Agent platforms supporting Skill mechanisms, including bu
 - [Architecture](#architecture)
 - [Project Structure](#project-structure)
 - [Output Examples](#output-examples)
-- [CI Integration](#ci-integration)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -247,9 +246,6 @@ skill-evaluator/
 │   │   ├── dimensions-*.md                # Scoring standards
 │   │   ├── prompts-*.md                   # Prompt templates
 │   │   └── report-*.md                    # Report formats
-│   └── ci/                                # CI integration configs
-│       ├── github-actions.yml             # GitHub Actions workflow
-│       └── gitlab-ci.yml                  # GitLab CI pipeline
 ├── scripts/
 │   └── deepseek_chat.py                   # DeepSeek API call script
 ├── config.json                           # DeepSeek API Key config (gitignored)
@@ -325,33 +321,6 @@ After evaluation, reports are automatically saved to the target Skill's root dir
 | D1(Metadata) | 8/10 | Unanimous | All models agree |
 | D3(DomainKnow) | 8/10 | Arbitrated | sonnet and deepseek-chat gave 8-9, deepseek-reasoner gave 6; adopted majority |
 ```
-
-## CI Integration
-
-The project provides GitHub Actions and GitLab CI configurations for automatic evaluation on Skill changes.
-
-### GitHub Actions
-
-```bash
-cp assets/ci/github-actions.yml .github/workflows/skill-evaluation.yml
-```
-
-Required Secrets:
-- `ANTHROPIC_API_KEY`: Claude API key (when using Claude CLI for evaluation)
-- `DEEPSEEK_API_KEY`: DeepSeek API Key (optional, for Strategy B)
-
-Triggers: Push or PR that modifies `SKILL.md` or `references/`, `assets/templates/` directories or any `.md` file. Supports manual trigger.
-
-### GitLab CI
-
-```bash
-cat assets/ci/gitlab-ci.yml >> .gitlab-ci.yml
-```
-
-Required GitLab CI/CD Variables:
-- `DEEPSEEK_API_KEY`: DeepSeek API Key (optional)
-
-Evaluation results retained as artifacts for 90 days.
 
 ## Independence Declaration
 

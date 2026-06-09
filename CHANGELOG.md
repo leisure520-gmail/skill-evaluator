@@ -34,8 +34,6 @@ All notable changes to this project will be documented in this file.
 - **[增量评估]** `references/eval-state.md` 版本兼容策略升级为完整决策树，增加 key 格式变更的迁移说明
 - **[多模型]** `references/multi-model.md` 补充策略 C 视角起点不对等的设计说明和仲裁偏差修正规则（严格派 +0.5 修正、分差 ≥3 强制引用原文裁决、最终分不低于最高分 85%）
 - **[第三层架构]** `references/layer3-architecture.md` D3(TDD)、D4(三文件)、D8(渐进采用) 新增「适用范围说明」和「不适用时的豁免/折算规则」
-- **[CI]** `assets/ci/github-actions.yml` 重写：修正 `exit 0`（无文件时） vs `exit 1`（达标失败时）退出码语义；补充 Layer 2/3 说明（仅第一层自动运行，2/3 需手动触发）；新增 `FAIL_ON_BELOW_S` 开关；修复增量状态缓存
-- **[CI]** `assets/ci/gitlab-ci.yml` 同步以上修复，新增 `cache` 配置支持增量状态跨 pipeline 复用
 - **[自举完整性]** 新增 `SELF_CHECK.md`：对 skill-evaluator 自身按 D1-D8 做自检，证明达到 A 级，列出遗留问题和独立验证计划
 - **[元数据]** `references/` 下所有子文档（auto-fix、config、eval-state、layer1-quality、layer2-consistency、layer3-architecture、multi-model）均新增 frontmatter
 - **[元数据]** `assets/templates/` 下所有模板文件（10 个）均新增 frontmatter
@@ -58,5 +56,4 @@ All notable changes to this project will be documented in this file.
 - `references/` 目录：layer1-quality.md、layer2-consistency.md、layer3-architecture.md、eval-state.md、multi-model.md、auto-fix.md、config.md
 - `assets/templates/` 目录：按层独立维护的评分标准、Prompt 模板、报告格式
 - `scripts/deepseek_chat.py`：DeepSeek API 调用脚本
-- assets/ci/ 目录：GitHub Actions 和 GitLab CI 配置
 - 项目发布文件：README.md、README_EN.md、.gitignore、LICENSE
