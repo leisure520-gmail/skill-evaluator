@@ -1,3 +1,11 @@
+---
+name: skill-evaluator/dimensions-layer1
+description: skill-evaluator 模板 — 第一层文件质量评估维度，含 D1-D8 各维度的四档评分标准
+status: published
+version: 1.0.1
+parent: skill-evaluator
+---
+
 # 第一层：文件质量评估维度
 
 > **适用范围**：第一层（文件质量评估）。第二层评分标准见 `assets/templates/dimensions-layer2.md`，第三层评分标准内嵌于 `references/layer3-architecture.md`。
@@ -5,6 +13,17 @@
 从以下 **8 个维度** 对每个文件打分，每个维度 0-10 分。此文件是第一层所有评估模式共用的唯一评分标准。
 
 > **评估深度**：入口文件（SKILL.md）和有 frontmatter 的子文档使用完整评估（D1-D8）；无 frontmatter 的子文档使用轻量评估（D3+D7）。详见 `references/layer1-quality.md` 评估深度分级。
+
+---
+
+### 权重设计依据
+
+权重分配遵循**核心能力优先**原则：
+
+- **15% 权重（D1/D2/D3/D4）**：这四个维度决定 Skill 的核心价值——元数据质量决定可发现性，执行引导决定可用性，领域知识决定不可替代性，工作流决定完整性。它们是 Skill 能否被正确触发和执行的关键，因此赋予更高权重。
+- **10% 权重（D5/D6/D7/D8）**：这四个维度影响 Skill 的易用性和规范性，但属于"锦上添花"——即使输入输出描述不够完美，Skill 仍可使用；即使写作质量一般，核心功能不受影响。
+
+> **设计哲学**：权重差异不大（15% vs 10%），避免单一维度过度主导总分。1.5:1 的比例确保核心维度有足够区分度，同时辅助维度仍有影响力。
 
 ---
 

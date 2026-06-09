@@ -1,3 +1,11 @@
+---
+name: skill-evaluator/eval-state
+description: skill-evaluator 子文档 — 增量评估状态管理，包含状态文件 Schema、指纹计算（跨平台）、换行符处理、版本迁移机制
+status: published
+version: 1.0.1
+parent: skill-evaluator
+---
+
 # 增量评估状态管理
 
 管理评估状态文件，实现增量评估：跳过未变更文件，仅评估新增/修改文件。
@@ -89,21 +97,55 @@
 
 ### 算法
 
-对文件完整内容计算 SHA-256 哈希：
+对文件完整内容计算 SHA-256 哈希。**根据运行平台自动选择命令**：
 
 ```bash
+# Linux / macOS
 sha256sum "{file_path}" | cut -d' ' -f1
+
+# Windows（PowerShell）
+(Get-FileHash "{file_path}" -Algorithm SHA256).Hash.ToLower()
+```
+
+**平台检测方式**（在 bash 环境中）：
+```bash
+if command -v sha256sum &>/dev/null; then
+  # Linux/macOS
+  FINGERPRINT=$(sha256sum "$FILE" | cut -d' ' -f1)
+else
+  # Windows via PowerShell fallback
+  FINGERPRINT=$(powershell -Command "(Get-FileHash '$FILE' -Algorithm SHA256).Hash.ToLower()")
+fi
 ```
 
 ### 指纹格式
 
-`sha256:{hex_digest}`
+`sha256:{hex_digest}`（统一小写）
+
+### 换行符统一（重要）
+
+跨平台团队（混用 Windows/Unix）中，同一文件在不同平台 checkout 后可能产生不同换行符（LF vs CRLF），导致指纹不同，从而产生"永远视为变更"的假阳性。
+
+**推荐处理方式**（按优先级）：
+
+1. **在被评估体系的 `.gitattributes` 中统一换行符**（最佳）：
+   ```gitattributes
+   *.md text eol=lf
+   ```
+
+2. **评估前规范化换行符**（次选，适用于无法修改 `.gitattributes` 的情况）：
+   ```bash
+   # 计算指纹前先规范化（仅用于计算，不修改原文件）
+   sed 's/\r//' "{file_path}" | sha256sum | cut -d' ' -f1
+   ```
+
+3. **标注警告**：若检测到 CRLF 文件（`file` 命令输出含 `CRLF`），在报告中注明"检测到 CRLF 换行符，指纹可能因平台而异，建议统一为 LF"。
 
 ### 注意事项
 
-- 指纹基于文件完整内容，包括 frontmatter 和正文
-- 换行符差异（LF vs CRLF）会导致指纹不同，评估前应统一换行符
+- 指纹基于文件完整内容（含 frontmatter 和正文），换行符规范化后计算
 - 空文件的指纹仍需计算并记录
+- 指纹统一使用小写十六进制，避免大小写导致的不必要"变更"
 
 ---
 
@@ -216,10 +258,24 @@ for category in categories:
 
 | 版本 | 变更 | 兼容策略 |
 |------|------|---------|
-| `1.0` | 初始版本 | — |
-| 未来版本 | 可能增加字段 | 新增字段设默认值，不删除旧字段 |
+| `1.0` | 初始版本，文件 key 为相对路径 | — |
+| 未来版本 | 可能增加字段或修改 key 格式 | 见下方迁移策略 |
 
-> 遇到高版本状态文件时：若 `version` 高于当前支持版本，输出警告但尝试兼容读取；若关键字段缺失，提示用户执行全量重评。
+### 读取时的版本处理逻辑
+
+```
+读取 eval-state.json
+  ├── version == 当前版本 → 正常读取
+  ├── version 字段不存在 → 视为损坏，重命名为 eval-state.json.bak，执行全量重评，提示用户
+  ├── version > 当前版本 → 输出警告，尝试兼容读取
+  │     ├── 关键字段（files / target_path）存在 → 兼容读取，新增字段设默认值
+  │     └── 关键字段缺失 → 重命名为 eval-state.json.bak，执行全量重评，提示用户
+  └── version < 当前版本（降级场景）→ 按旧版格式读取，评估完成后升级为当前版本格式写回
+```
+
+### key 格式变更的迁移
+
+若未来版本将文件 key 从"相对路径"改为其他格式，旧版状态文件的所有记录均视为"已删除"，触发全量重评（不报错，评估完成后写入新版状态文件）。
 
 ---
 

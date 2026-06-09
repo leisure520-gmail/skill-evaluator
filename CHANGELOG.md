@@ -2,7 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.0.0] - 2026-06-07
+## [1.0.1] - 2026-06-09
+
+### Fixed
+
+- **[D5 输入输出]** `SKILL.md` 新增「输入输出契约」章节，明确输入路径格式（绝对/相对/Windows）、跨平台限制、输出文件名时间戳时区（UTC+8）、报告编码（UTF-8 无 BOM）
+- **[D2 执行引导]** `SKILL.md` 预检清单新增「确认方式」列，明确每项如何确认，取代原始的空白复选框
+- **[D2 执行引导]** `SKILL.md` 新增「异常处理」表，覆盖路径不存在、无 SKILL.md、文件不可读、状态文件损坏、API Key 无效、修复超限六种场景
+- **[D8 范围聚焦]** `SKILL.md` 新增「与其他 Skill 的组合使用」章节，声明与 skill-creator 的协作关系和不适用场景
+- **[自动修复]** `references/auto-fix.md` 新增「快照优先」规则：修复前保存原文件到 `eval-results/snapshots/{timestamp}/`，供人工回滚
+- **[自动修复]** `references/auto-fix.md` 新增「仅建议模式」：用户说"只给建议/不要自动修复"时跳过所有修复操作
+- **[自动修复]** `references/auto-fix.md` 明确 MAX_FIX_ROUNDS 耗尽行为：停止修复该文件、继续下一个、在报告末尾汇总需人工介入项，并提供汇总表格式
+- **[自动修复]** `references/auto-fix.md` 新增第一层修复约束表，明确允许范围（新增章节、修正 frontmatter）和禁止范围（删除章节、更改核心定位）
+- **[增量评估]** `references/eval-state.md` 指纹计算新增跨平台支持：Linux/macOS 用 `sha256sum`，Windows 用 `Get-FileHash`（PowerShell），含平台检测逻辑
+- **[增量评估]** `references/eval-state.md` 换行符处理新增三种方案（`.gitattributes`、规范化计算、警告标注），解决 LF/CRLF 假阳性问题
+- **[增量评估]** `references/eval-state.md` 版本兼容策略升级为完整决策树，增加 key 格式变更的迁移说明
+- **[多模型]** `references/multi-model.md` 补充策略 C 视角起点不对等的设计说明和仲裁偏差修正规则（严格派 +0.5 修正、分差 ≥3 强制引用原文裁决、最终分不低于最高分 85%）
+- **[第三层架构]** `references/layer3-architecture.md` D3(TDD)、D4(三文件)、D8(渐进采用) 新增「适用范围说明」和「不适用时的豁免/折算规则」
+- **[CI]** `assets/ci/github-actions.yml` 重写：修正 `exit 0`（无文件时） vs `exit 1`（达标失败时）退出码语义；补充 Layer 2/3 说明（仅第一层自动运行，2/3 需手动触发）；新增 `FAIL_ON_BELOW_S` 开关；修复增量状态缓存
+- **[CI]** `assets/ci/gitlab-ci.yml` 同步以上修复，新增 `cache` 配置支持增量状态跨 pipeline 复用
+- **[自举完整性]** 新增 `SELF_CHECK.md`：对 skill-evaluator 自身按 D1-D8 做自检，证明达到 A 级，列出遗留问题和独立验证计划
+- **[元数据]** `references/` 下所有子文档（auto-fix、config、eval-state、layer1-quality、layer2-consistency、layer3-architecture、multi-model）均新增 frontmatter
+- **[元数据]** `assets/templates/` 下所有模板文件（10 个）均新增 frontmatter
+- **[文档]** `TRAINING.md` 消除与 `SKILL.md` 的重复内容：三层体系描述改为引用，维度详解章节新增指引说明
+
+
 
 ### Added
 

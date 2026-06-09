@@ -1,4 +1,4 @@
-name: Skill Evaluation (v3.1 — 三层评估 + 全量扫描 + 增量评估)
+name: Skill Evaluation (v3.2 — 三层评估 + 全量扫描 + 增量评估)
 
 on:
   push:
@@ -16,9 +16,17 @@ on:
   workflow_dispatch:
     inputs:
       skill_path:
-        description: 'Path to the Skill directory to evaluate'
+        description: 'Path to the Skill directory to evaluate (default: all skills in repo)'
         required: false
         default: '.'
+      layers:
+        description: 'Evaluation layers to run: 1 / 2 / 3 / all (default: 1 for CI, all for manual)'
+        required: false
+        default: '1'
+      fail_on_below_s:
+        description: 'Fail CI if any skill is below S grade (9.0)'
+        required: false
+        default: 'true'
 
 jobs:
   evaluate:
@@ -35,62 +43,115 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Run Skill Evaluation (Layer 1 — Full Scan)
+      # Restore incremental evaluation state cache
+      - name: Restore eval-state cache
+        uses: actions/cache@v4
+        with:
+          path: eval-results/eval-state.json
+          key: eval-state-${{ github.repository }}-${{ github.ref_name }}
+          restore-keys: |
+            eval-state-${{ github.repository }}-
+
+      - name: Run Skill Evaluation (Layer 1 — File Quality)
+        id: layer1
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           SKILL_PATH="${{ github.event.inputs.skill_path || '.' }}"
+          LAYERS="${{ github.event.inputs.layers || '1' }}"
+          FAIL_ON_BELOW_S="${{ github.event.inputs.fail_on_below_s || 'true' }}"
 
           # Find all SKILL.md files (excluding skill-evaluator itself and eval-results)
           if [ "$SKILL_PATH" = "." ]; then
-            SKILLS=$(find . -name 'SKILL.md' -not -path './SKILL.md' -not -path './eval-results/*')
+            SKILLS=$(find . -name 'SKILL.md' \
+              -not -path './SKILL.md' \
+              -not -path './skill-evaluator/SKILL.md' \
+              -not -path './eval-results/*')
           else
             SKILLS="$SKILL_PATH/SKILL.md"
           fi
 
           if [ -z "$SKILLS" ]; then
             echo "No SKILL.md files found to evaluate."
+            # EXIT 0 only when there is truly nothing to evaluate (not a failure)
             exit 0
           fi
 
           mkdir -p eval-results
-
-          # Restore eval-state.json for incremental evaluation
-          if [ -f "eval-results/eval-state.json" ]; then
-            echo "Found existing eval-state.json, incremental evaluation enabled."
-          else
-            echo "No eval-state.json found, will perform full evaluation."
-          fi
+          FAILED_SKILLS=()
 
           for SKILL in $SKILLS; do
             SKILL_DIR=$(dirname "$SKILL")
             SKILL_NAME=$(basename "$SKILL_DIR")
-            TIMESTAMP=$(date +%Y-%m-%d_%H%M%S)
+            TIMESTAMP=$(date -u +%Y%m%d_%H%M%S)
             OUTPUT_DIR="eval-results/$SKILL_NAME"
             mkdir -p "$OUTPUT_DIR"
 
-            echo "Evaluating: $SKILL_NAME"
+            echo "====================================="
+            echo "Evaluating: $SKILL_NAME (Layer 1)"
             echo "Output: $OUTPUT_DIR/layer1_${TIMESTAMP}.md"
+            echo "====================================="
 
-            # Use Claude Code CLI for evaluation
-            # Requires ANTHROPIC_API_KEY secret to be configured
+            EXIT_CODE=0
             if command -v claude &> /dev/null; then
-              claude --skill skill-evaluator "评估 $SKILL" > "$OUTPUT_DIR/layer1_${TIMESTAMP}.md" 2>&1
+              claude --skill skill-evaluator \
+                "评估 $SKILL，仅执行第一层，单模型模式" \
+                > "$OUTPUT_DIR/layer1_${TIMESTAMP}.md" 2>&1 || EXIT_CODE=$?
             else
-              echo "Claude CLI not available. Skipping evaluation for $SKILL_NAME."
-              echo "Install Claude Code CLI or use the API-based evaluation script." > "$OUTPUT_DIR/layer1_${TIMESTAMP}.md"
+              echo "Claude CLI not available." > "$OUTPUT_DIR/layer1_${TIMESTAMP}.md"
+              echo "Install Claude Code CLI (npm install -g @anthropic-ai/claude-code) or set ANTHROPIC_API_KEY."
+              EXIT_CODE=1
+            fi
+
+            # Check if evaluation result contains below-S grade
+            if [ "$FAIL_ON_BELOW_S" = "true" ] && [ -f "$OUTPUT_DIR/layer1_${TIMESTAMP}.md" ]; then
+              if grep -qE '等级[[:space:]]*[BCDE]|grade[[:space:]]*:[[:space:]]*"[BCDE]"' \
+                "$OUTPUT_DIR/layer1_${TIMESTAMP}.md"; then
+                echo "⚠ $SKILL_NAME contains files below S grade."
+                FAILED_SKILLS+=("$SKILL_NAME")
+              fi
             fi
           done
 
+          # --- Layer 2 / 3 (manual trigger only) ---
+          if [ "$LAYERS" = "2" ] || [ "$LAYERS" = "all" ]; then
+            echo "Layer 2 evaluation is configured for manual trigger only."
+            echo "Prerequisite: all Layer 1 results must be S grade."
+            echo "Run manually: claude --skill skill-evaluator '评估 <path>，执行第二层'"
+          fi
+
+          if [ "$LAYERS" = "3" ] || [ "$LAYERS" = "all" ]; then
+            echo "Layer 3 (architecture) evaluation is configured for manual trigger only."
+            echo "Prerequisite: all Layer 2 results must be S grade."
+            echo "Run manually: claude --skill skill-evaluator '评估 <path>，执行第三层'"
+          fi
+
+          # Fail CI if any skill is below S grade
+          if [ "${#FAILED_SKILLS[@]}" -gt 0 ]; then
+            echo ""
+            echo "❌ CI FAILED: The following skills have files below S grade (9.0):"
+            for s in "${FAILED_SKILLS[@]}"; do
+              echo "  - $s"
+            done
+            echo "Review eval-results artifacts for details."
+            exit 1
+          fi
+
+          echo "✅ All evaluated skills passed Layer 1 quality check."
+
       - name: Upload Evaluation Results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: eval-results
+          name: eval-results-${{ github.run_id }}
           path: eval-results/
           retention-days: 90
 
-      - name: Check Evaluation Threshold
-        run: |
-          # Parse the latest evaluation results and check if any Skill is below S-grade
-          # This step can be customized with specific threshold logic
-          echo "Evaluation results uploaded. Review the artifact for details."
+      # Save incremental evaluation state for next run
+      - name: Save eval-state cache
+        if: always()
+        uses: actions/cache@v4
+        with:
+          path: eval-results/eval-state.json
+          key: eval-state-${{ github.repository }}-${{ github.ref_name }}

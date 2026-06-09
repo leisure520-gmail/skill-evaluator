@@ -1,3 +1,11 @@
+---
+name: skill-evaluator/report-layer1
+description: skill-evaluator 模板 — 第一层文件质量评估报告格式，含维度评分表、证据引用、改进建议格式
+status: published
+version: 1.0.1
+parent: skill-evaluator
+---
+
 # 第一层：文件质量评估报告格式
 
 > **适用范围**：第一层（文件质量评估）的报告输出。

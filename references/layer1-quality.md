@@ -1,3 +1,11 @@
+---
+name: skill-evaluator/layer1-quality
+description: skill-evaluator 子文档 — 第一层文件质量评估完整规范，含 D1-D8 八个维度的检查项、评分标准和执行流程
+status: published
+version: 1.0.1
+parent: skill-evaluator
+---
+
 # 第一层：文件质量评估
 
 评估 Skill 体系内每个 .md 文件的写作质量。LAYER1_DIMENSIONS 个加权维度，SCORE_RANGE 分制，S 级（>= PASSING_SCORE）为唯一达标等级。
@@ -184,7 +192,7 @@ Skill 是否内嵌了通用 Agent 不具备的专业知识、最佳实践和行�
    c. 按评估深度对应的维度逐项打分
    d. 每个评分附带具体证据引用（文件路径 + 行号/内容片段）
    e. 计算加权综合得分和等级
-   f. 对低于 7 分的维度给出：问题 + 影响 + 可执行建议
+   f. 对低于 9 分的维度给出：问题 + 影响 + 可执行建议
    g. 更新评估状态文件（references/eval-state.md）
 3. 聚合分类级评分（入口文件 + 子文档的平均分/最低分）
 4. 输出评估报告

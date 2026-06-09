@@ -1,3 +1,11 @@
+---
+name: skill-evaluator/dimensions-index
+description: skill-evaluator 模板 — 评估维度路由索引，按层独立维护，修改一层不影响其他层
+status: published
+version: 1.0.1
+parent: skill-evaluator
+---
+
 # 评估维度（路由）
 
 > 本文件为路由索引，各层评分标准按层独立维护，修改一层不影响其他层。

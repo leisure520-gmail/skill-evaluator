@@ -1,3 +1,11 @@
+---
+name: skill-evaluator/report-layer3
+description: skill-evaluator 模板 — 第三层体系架构评估报告格式，含架构成熟度雷达图和改进路线图格式
+status: published
+version: 1.0.1
+parent: skill-evaluator
+---
+
 # 第三层：体系架构评估报告格式
 
 > **适用范围**：第三层（体系架构评估）的报告输出。第三层仅使用单模型模式。

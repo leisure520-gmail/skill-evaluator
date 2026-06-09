@@ -1,3 +1,11 @@
+---
+name: skill-evaluator/layer2-consistency
+description: skill-evaluator 子文档 — 第二层分类一致性评估规范，检查同一分类下文件间的冲突、重叠、遗漏、引用和术语一致性
+status: published
+version: 1.0.1
+parent: skill-evaluator
+---
+
 # 第二层：分类一致性评估
 
 评估同一分类下文件之间是否协调——有无冲突、重叠、遗漏。LAYER2_DIMENSIONS 个加权维度，SCORE_RANGE 分制，S 级（>= PASSING_SCORE）为唯一达标等级。
@@ -172,7 +180,7 @@
 3. 交叉比对：子文档 frontmatter vs SKILL.md 路由表
 4. 逐维度评分（D1-D8），每个维度输出：评分 + 证据 + 问题列表
 5. 计算加权总分和等级
-6. 对低于 7 分的维度给出改进建议
+6. 对低于 9 分的维度给出改进建议
 7. 输出评估报告
 8. 持久化：将报告保存到 {评估结果根目录}/{分类名称}/layer2_{YYYY-MM-DD_HHmmss}.md
 9. 历史对比：若该分类存在历史评估报告，输出趋势分析
