@@ -15,7 +15,7 @@ All notable changes to this project will be documented in this file.
 
 ### Updated
 
-- 所有文件版本号统一升级为 1.1.0
+- SKILL.md、SELF_CHECK.md 及 references/ 子文档（共 9 个文件）版本号统一升级为 1.1.0；assets/templates/ 资源文件不包含版本号
 
 ## [1.0.1] - 2026-06-09
 

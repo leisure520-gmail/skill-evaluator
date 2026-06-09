@@ -154,5 +154,5 @@ parent: skill-evaluator
 | assets/templates/ 模板文件无 frontmatter | D1 | ✅ v1.0.1 已回退（模板文件不要求 frontmatter，按内容评估处理） | — |
 | assets/templates/ 模板文件曾错误添加 frontmatter | D1 | ✅ v1.0.1 已回退，明确资源文件角色 | — |
 | SELF_CHECK.md 无 frontmatter | D1 | ✅ v1.0.1 已补充 | — |
-| 子文档版本号与主版本不同步 | D1 | ✅ v1.1.0 已修复（19 个文件统一为 1.1.0） | — |
+| 子文档版本号与主版本不同步 | D1 | ✅ v1.1.0 已修复（9 个文件统一为 1.1.0，assets/templates/ 资源文件不包含版本号） | — |
 | 独立第三方验证（另一 AI 实例对本 Skill 执行评估） | 全部 | 待执行 | v1.1.0 发布前 |
