@@ -2,7 +2,7 @@
 name: skill-evaluator/prompts-layer1
 description: skill-evaluator 模板 — 第一层文件质量评估 Prompt 模板，供多模型/多视角模式使用
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 

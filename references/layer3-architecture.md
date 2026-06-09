@@ -2,7 +2,7 @@
 name: skill-evaluator/layer3-architecture
 description: skill-evaluator 子文档 — 第三层体系架构评估规范，含 D1-D12 十二个维度，包含 TDD/三文件/渐进采用等维度的"不适用"豁免规则
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 

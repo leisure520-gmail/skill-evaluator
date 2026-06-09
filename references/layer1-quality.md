@@ -2,7 +2,7 @@
 name: skill-evaluator/layer1-quality
 description: skill-evaluator 子文档 — 第一层文件质量评估完整规范，含 D1-D8 八个维度的检查项、评分标准和执行流程
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 

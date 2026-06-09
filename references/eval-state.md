@@ -2,7 +2,7 @@
 name: skill-evaluator/eval-state
 description: skill-evaluator 子文档 — 增量评估状态管理，包含状态文件 Schema、指纹计算（跨平台）、换行符处理、版本迁移机制
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 

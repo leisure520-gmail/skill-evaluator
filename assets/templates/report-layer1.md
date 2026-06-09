@@ -2,7 +2,7 @@
 name: skill-evaluator/report-layer1
 description: skill-evaluator 模板 — 第一层文件质量评估报告格式，含维度评分表、证据引用、改进建议格式
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 

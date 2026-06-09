@@ -2,7 +2,7 @@
 name: skill-evaluator/config
 description: skill-evaluator 子文档 — 共享常量定义，包含路径、评分阈值、Token 配置、API 配置等全局常量。修改此处即可全局生效
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 
@@ -65,7 +65,7 @@ parent: skill-evaluator
 
 | 变量名 | 当前值 | 说明 | 示例 |
 |------|------|------|------|
-| `VERSION` | `1.0.1` | 当前项目版本 | `1.0.1` |
+| `VERSION` | `1.1.0` | 当前项目版本 | `1.1.0` |
 
 ---
 

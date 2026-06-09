@@ -2,7 +2,7 @@
 name: skill-evaluator/dimensions-layer2
 description: skill-evaluator 模板 — 第二层分类一致性评估维度，含 D1-D8 各维度的四档评分标准
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 

@@ -2,7 +2,7 @@
 name: skill-evaluator/auto-fix
 description: skill-evaluator 子文档 — 自动修复机制规则，包含快照保护、仅建议模式、修复边界约束和人工介入汇总格式
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 

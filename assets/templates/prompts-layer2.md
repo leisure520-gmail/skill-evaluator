@@ -2,7 +2,7 @@
 name: skill-evaluator/prompts-layer2
 description: skill-evaluator 模板 — 第二层分类一致性评估 Prompt 模板，供多模型/多视角模式使用
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 

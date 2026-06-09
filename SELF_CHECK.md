@@ -2,7 +2,7 @@
 name: skill-evaluator/self-check
 description: skill-evaluator 自检清单，按 D1-D8 维度对自身进行人工自检
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 

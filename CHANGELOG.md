@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2026-06-09
+
+### Fixed
+
+- **[D1 元数据]** 新增「资源文件」角色：`assets/` 下的模板/示例/范本文件设计上不应有 frontmatter，按内容评估（仅 D3+D7），不触发 D1 扣分和自动修复
+
+### Added
+
+- **资源文件识别规则**：文件路径包含 `assets/` 目录，或文件名包含 `template`、`example`、`sample`、`demo` 关键词
+- **评估深度分级扩展**：从 4 种角色增加到 5 种，明确区分"无 frontmatter 子文档"（应补充）与"资源文件"（不应有）
+
+### Updated
+
+- 所有文件版本号统一升级为 1.1.0
+
 ## [1.0.1] - 2026-06-09
 
 ### Fixed

@@ -2,7 +2,7 @@
 name: skill-evaluator/layer2-consistency
 description: skill-evaluator 子文档 — 第二层分类一致性评估规范，检查同一分类下文件间的冲突、重叠、遗漏、引用和术语一致性
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 

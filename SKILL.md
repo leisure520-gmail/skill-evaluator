@@ -2,7 +2,7 @@
 name: skill-evaluator
 description: Skill 评估工具（三层评估 + 全量扫描） — 独立于被评估体系，提供文件质量评估（8 维度）、分类一致性评估（8 维度）和体系架构评估（12 维度），支持多模型交叉验证和多 Skill 对比。全量扫描所有 .md 文件，增量评估跳过未变更文件。TRIGGER when 评审/审计/打分/对比 Skill；DO NOT TRIGGER when 修改 Skill 内容本身
 status: published
-version: 1.0.1
+version: 1.1.0
 order: 0
 ---
 

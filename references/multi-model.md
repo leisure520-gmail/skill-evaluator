@@ -2,7 +2,7 @@
 name: skill-evaluator/multi-model
 description: skill-evaluator 子文档 — 多模型交叉验证策略，含策略 A/B/C 自动降级流程、仲裁规则和策略 C 视角偏差修正机制
 status: published
-version: 1.0.1
+version: 1.1.0
 parent: skill-evaluator
 ---
 
