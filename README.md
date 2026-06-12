@@ -10,6 +10,10 @@
 
 - [特性](#特性)
 - [快速开始](#快速开始)
+  - [安装](#安装)
+  - [升级](#升级)
+  - [配置](#配置)
+  - [基本用法](#基本用法)
 - [使用方式](#使用方式)
 - [架构](#架构)
 - [项目结构](#项目结构)
@@ -40,6 +44,20 @@ git clone https://github.com/jasonzhuo/skill-evaluator.git ~/.claude/skills/skil
 ```
 
 其他 Agent 平台请将 `SKILL.md` 放置到对应的 Skill 目录下。
+
+> **install.js 安装范围说明**：`node bin/install.js init` 仅安装 Agent 运行时所需文件（`SKILL.md`、`references/`、`scripts/`、`assets/`），不安装 `TRAINING.md`、`README.md`、`CHANGELOG.md` 等文档文件。如需查阅这些文档，请访问 GitHub 仓库或在本地克隆时查看完整目录。
+
+### 升级
+
+```bash
+# 预览本次升级变更（不写入）
+node bin/upgrade.js diff [path]
+
+# 执行升级（受保护文件 config.json 不会被覆盖）
+node bin/upgrade.js apply [path]
+```
+
+`path` 默认为当前工作目录，可指定为目标 Skill 安装目录（如 `~/.claude/skills/skill-evaluator`）。
 
 ### 配置
 

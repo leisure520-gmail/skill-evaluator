@@ -26,7 +26,7 @@ parent: skill-evaluator
 
 | 规则 | 说明 |
 |------|------|
-| 快照优先 | **修复前必须保存原文件快照**，路径：`{被评估根目录}/eval-results/snapshots/{YYYYMMDD_HHmmss}/{relative_path}`。快照在报告中注明路径，供人工回滚 |
+| 快照优先 | **修复前必须保存原文件快照**，路径：`{被评估根目录}/eval-results/snapshots/{YYYY-MM-DD_HHmmss}/{relative_path}`。快照在报告中注明路径，供人工回滚 |
 | 仅建议模式 | 若用户说"只给建议/不要自动修复"，则跳过所有修复操作，仅在报告中列出改进建议，不修改任何文件 |
 | 不询问用户 | 非仅建议模式下，发现未达标项后直接修复，不中断流程询问用户是否修复 |
 | 按建议修复 | 依据评估报告中的改进建议逐项修复 |
@@ -135,7 +135,7 @@ parent: skill-evaluator
 
 | 文件/分类 | 层级 | 修复轮次 | 最终得分 | 最薄弱维度 | 快照路径 |
 |---------|------|---------|---------|-----------|---------|
-| writing-java-code/03-dto.md | 第一层 | 3/3 | 7.2/B | D3(领域知识) | eval-results/snapshots/20260607_143025/writing-java-code/03-dto.md |
+| writing-java-code/03-dto.md | 第一层 | 3/3 | 7.2/B | D3(领域知识) | eval-results/snapshots/2026-06-07_143025/writing-java-code/03-dto.md |
 
 **建议操作**：
 1. 从快照路径恢复原文件（如需对比）

@@ -2,7 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.1.0] - 2026-06-09
+## [1.1.1] - 2026-06-12
+
+### Fixed
+
+- **[D2/D5 路径矛盾]** `SKILL.md` 独立性声明和全局约束第3条删除"保存到被评估体系外部"的误导表述，改为准确描述"保存在被评估体系的 `eval-results/` 子目录下，与 skill-evaluator 自身隔离"
+- **[D2 预检]** `SKILL.md` 预检第3项确认方式从"查 eval-state.json 的 grade 字段"更正为"查最新 layer1 报告的分类平均分/最低分"（eval-state.json 不存储分类级汇总）；预检第6项删除"必须在被评估体系外部"的错误描述
+- **[D5 文件名格式]** `SKILL.md` 输出约定时间戳格式从 `YYYYMMDD_HHmmss` 统一为 `YYYY-MM-DD_HHmmss`，与 `references/config.md` 的权威定义对齐；结果持久化章节占位符 `EVAL_RESULTS_DIR`/`REPORT_FILENAME` 替换为具体路径和文件名格式
+- **[D5 快照路径]** `references/auto-fix.md` 快照路径时间戳格式从 `YYYYMMDD_HHmmss` 统一为 `YYYY-MM-DD_HHmmss`，与 config.md 对齐
+- **[D1 frontmatter]** `TRAINING.md` 补充 frontmatter（name/description/status/version/parent）
+- **[D6 文档]** `README.md` 新增"升级"小节，说明 `node bin/upgrade.js` 用法；新增 install.js 安装范围说明（仅安装运行时文件，文档类文件保留在仓库）；目录新增"升级"条目
+- **[SELF_CHECK]** 更新自检版本至 1.1.1，更新综合评估结论，补录本次所有修复项到已知遗留问题表，将独立第三方验证计划版本延至 v1.2.0
+
+
 
 ### Fixed
 

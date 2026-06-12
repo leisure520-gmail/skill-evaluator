@@ -1,3 +1,11 @@
+---
+name: skill-evaluator/training
+description: skill-evaluator 培训分享指南 — 解释三层评估体系设计理念、S 级达标制、增量评估和多模型机制，面向团队内部培训使用
+status: published
+version: 1.1.0
+parent: skill-evaluator
+---
+
 # Skill Evaluator 培训分享指南
 
 > 本指南面向团队内部培训和技术分享，帮助成员快速理解 skill-evaluator 的设计理念、核心机制和使用方法。
